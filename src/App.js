@@ -1,6 +1,7 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
+import MyComponent from './components/MyComponents';
 
 function App() {
   return (
@@ -16,8 +17,9 @@ function App() {
           target="_blank"
           rel="noopener noreferrer"
         >
-          Learn React
+          Learn react {process.env.NODE_ENV}
         </a>
+        <MyComponent />
       </header>
     </div>
   );
