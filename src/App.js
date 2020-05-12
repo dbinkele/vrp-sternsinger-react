@@ -2,6 +2,7 @@ import React from 'react';
 import logo from './logo.svg';
 import './App.css';
 import MyComponent from './components/MyComponents';
+import ResultTable from './components/ResultTable';
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
           Learn react {process.env.NODE_ENV}
         </a>
         <MyComponent />
+        <ResultTable />
       </header>
     </div>
   );
