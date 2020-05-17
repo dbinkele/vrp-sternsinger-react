@@ -33,11 +33,6 @@ function MainContent() {
                 <Typography variant='h6'>Title</Typography>
             </div>
             <div className={classes.content}>
-                <Typography paragraph>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc maximus,
-                    nulla ut commodo sagittis, sapien dui mattis dui, non pulvinar lorem
-                    felis nec erat
-        </Typography>
                 <TestTable />
             </div>
         </main>
