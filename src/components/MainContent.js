@@ -33,7 +33,6 @@ function MainContent() {
                 <Typography variant='h6'>Title</Typography>
             </div>
             <div className={classes.content}>
-                <TestTable />
                 <TestTable2 />
             </div>
         </main>
