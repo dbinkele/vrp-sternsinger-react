@@ -48,11 +48,11 @@ class TestTable extends Component {
                 <MaterialTable
                     icons={tableIcons}
                     columns={[
-                        { title: "Adı", field: "name" },
-                        { title: "Soyadı", field: "surname" },
-                        { title: "Doğum Yılı", field: "birthYear", type: "numeric" },
+                        { title: "Namw", field: "name" },
+                        { title: "Surname", field: "surname" },
+                        { title: "Birth Year", field: "birthYear", type: "numeric" },
                         {
-                            title: "Doğum Yeri",
+                            title: "Place of Birth",
                             field: "birthCity",
                             lookup: { 34: "İstanbul", 63: "Şanlıurfa" }
                         }

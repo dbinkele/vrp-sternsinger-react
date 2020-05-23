@@ -5,7 +5,7 @@ import { Typography } from '@material-ui/core';
 import MyComponent from './MyComponents'
 import ResultTable from './ResultTable'
 import TestTable from './TestTable'
-
+import TestTable2 from './TestTable2'
 
 const useStyles = makeStyles(theme => ({
     toolbar: theme.mixins.toolbar,
@@ -34,6 +34,7 @@ function MainContent() {
             </div>
             <div className={classes.content}>
                 <TestTable />
+                <TestTable2 />
             </div>
         </main>
     );
