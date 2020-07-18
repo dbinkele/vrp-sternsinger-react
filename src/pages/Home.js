@@ -4,7 +4,6 @@ import TopMenu from '../components/TopMenu';
 import SideMenu from '../components/SideMenu';
 import Footer from '../components/Footer';
 import MainContent from '../components/MainContent';
-import MyComponent from '../components/MyComponents';
 
 const useStyles = makeStyles(theme => ({
     root: {

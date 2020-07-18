@@ -1,11 +1,9 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { Grid } from '@material-ui/core';
 import { Typography } from '@material-ui/core';
-import MyComponent from './MyComponents'
-import ResultTable from './ResultTable'
-import TestTable from './TestTable'
-import TestTable2 from './TestTable2'
+import RouteData from './RouteData'
+import RoutesIdForm from "./RoutesIdForm";
+import {RouteIdProvider} from "./RouteIdContext";
 
 const useStyles = makeStyles(theme => ({
     toolbar: theme.mixins.toolbar,
@@ -33,7 +31,10 @@ function MainContent() {
                 <Typography variant='h6'>Title</Typography>
             </div>
             <div className={classes.content}>
-                <TestTable2 />
+                <RouteIdProvider>
+                    <RoutesIdForm />
+                    <RouteData />
+                </RouteIdProvider>
             </div>
         </main>
     );
