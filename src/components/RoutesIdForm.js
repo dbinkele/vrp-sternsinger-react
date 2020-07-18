@@ -15,7 +15,7 @@ const SetRoutId = () => {
     return(
         <form onSubmit={onSubmit}>
             <label htmlFor="Token">Token</label>
-            <input type="text" id="name" value={token} onChange={e => setToken(e.target.value)}/>
+            <input type="text" id="name" value={token} onChange={e => setToken(e.target.value)} style={{ width: "500px" }}/>
             <button>submit</button>
         </form>
     );
