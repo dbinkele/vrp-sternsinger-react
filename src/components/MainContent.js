@@ -1,7 +1,7 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Typography } from '@material-ui/core';
-import RouteData from './RouteData'
+import TourResult from './table/TourResult'
 import RoutesIdForm from "./RoutesIdForm";
 import {RouteIdProvider} from "./RouteIdContext";
 
@@ -33,7 +33,7 @@ function MainContent() {
             <div className={classes.content}>
                 <RouteIdProvider>
                     <RoutesIdForm />
-                    <RouteData />
+                    <TourResult />
                 </RouteIdProvider>
             </div>
         </main>
