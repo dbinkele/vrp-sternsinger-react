@@ -4,6 +4,7 @@ import { Typography } from '@material-ui/core';
 import TourResult from './table/TourResult'
 import RoutesIdForm from "./RoutesIdForm";
 import {RouteIdProvider} from "./RouteIdContext";
+import TourItems from "./table/TourItems";
 
 const useStyles = makeStyles(theme => ({
     toolbar: theme.mixins.toolbar,
@@ -32,6 +33,7 @@ function MainContent() {
             </div>
             <div className={classes.content}>
                 <RouteIdProvider>
+                    <TourItems />
                     <RoutesIdForm />
                     <TourResult />
                 </RouteIdProvider>

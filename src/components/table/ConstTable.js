@@ -1,4 +1,4 @@
-import React, {forwardRef, useContext, useEffect, useState} from "react";
+import React, {forwardRef} from "react";
 
 import AddBox from '@material-ui/icons/AddBox';
 import ArrowDownward from '@material-ui/icons/ArrowDownward';
@@ -35,3 +35,13 @@ export const tableIcons = {
     ThirdStateCheck: forwardRef((props, ref) => <Remove {...props} ref={ref}/>),
     ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref}/>)
 };
+
+
+export const cols = [
+    {title: 'Postal Code', field: 'code'},
+    {title: 'City', field: 'city'},
+    {title: 'Street', field: 'street'},
+    {title: 'Number', field: 'number'},
+    {title: 'Name', field: 'name'},
+    {title: 'Hint', field: 'hint'}
+]

@@ -1,8 +1,8 @@
-import React, {forwardRef, useContext, useEffect, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import {url} from '../../util/tools'
 import MaterialTable from "material-table";
 import {RouteIdContext} from "../RouteIdContext";
-import {tableIcons} from './ConstTable'
+import {tableIcons, cols} from './ConstTable'
 
 const TourResult = () => {
 
@@ -32,15 +32,10 @@ const TourResult = () => {
             <MaterialTable
                 options={{paging: false}}
                 icons={tableIcons}
-                title="Remote Data Preview"
+                title="Computed Tour Result"
                 columns={[
+                    ...cols,
                     {title: 'Id', field: 'id'},
-                    {title: 'Postal Code', field: 'code'},
-                    {title: 'City', field: 'city'},
-                    {title: 'Street', field: 'street'},
-                    {title: 'Number', field: 'number'},
-                    {title: 'Name', field: 'name'},
-                    {title: 'Hint', field: 'hint'},
                     {title: 'Latitude', field: 'lat'},
                     {title: 'Longitude', field: 'lon'},
                 ]}

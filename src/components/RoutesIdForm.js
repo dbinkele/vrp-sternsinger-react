@@ -4,7 +4,7 @@ import React, {useContext, useState} from 'react';
 import {RouteIdContext} from "./RouteIdContext";
 
 const SetRoutId = () => {
-    const [routeId, setRouteId] = useContext(RouteIdContext);
+    const [, setRouteId] = useContext(RouteIdContext);
     const [token, setToken] = useState('')
 
     const onSubmit = e => {
