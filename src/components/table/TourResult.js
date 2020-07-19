@@ -7,7 +7,7 @@ import {tableIcons} from './ConstTable'
 const TourResult = () => {
 
     const [data, setData] = useState({routes: [], error: ""});
-    const [routeId, setRouteId] = useContext(RouteIdContext);
+    const [routeId] = useContext(RouteIdContext);
 
     useEffect(() => {
         console.log("Da value is " + routeId)
