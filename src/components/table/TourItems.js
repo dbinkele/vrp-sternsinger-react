@@ -1,23 +1,24 @@
 import React, {useEffect, useState} from "react";
-import {usePrevious, arrayDiff, uuid} from '../../util/tools'
+import {usePrevious, partition, timeorderedUuid, uuidCompare} from '../../util/tools'
 import MaterialTable from "material-table";
 import {cols, tableIcons} from './ConstTable'
+const _ = require('lodash/core');
 
 const TourItems = () => {
-
     const [data, setData] = useState([]);
 
     // Get the previous value (was passed into hook on last render)
     const prevData = usePrevious(data);
 
     useEffect(() => {
-        if (prevData && data && prevData.length !== data.length) {
-            // ToDo find updated and added items via id...
-            let addedData = arrayDiff(prevData, data);
-
-            let prevDataCopy = [...prevData]
-            addedData.forEach(row => {
-                setCoordinates(row, prevDataCopy, setData)
+        if (prevData && data) {
+            let [added, updated, untouched] = diff(prevData, data);
+            [...added, ...updated].forEach(row => {
+                setCoordinates(row, () => {
+                    untouched.push(row);
+                    //ToDo sort does not work
+                    setData(untouched.sort((x, y) => uuidCompare(x.id, y.id)));
+                })
             });
         }
     }, [data])
@@ -33,9 +34,8 @@ const TourItems = () => {
                 onRowAdd: newData =>
                     new Promise((resolve, reject) => {
                         setTimeout(() => {
-                            newData.id = uuid();
+                            newData.id = timeorderedUuid();
                             setData([...data, newData]);
-
                             resolve();
                         }, 100)
                     }),
@@ -67,7 +67,7 @@ const TourItems = () => {
 
 }
 
-const setCoordinates = (row, prevData, setData) => {
+const setCoordinates = (row, effect) => {
     let url = `https://nominatim.openstreetmap.org/search?format=json&country=de&postalcode=${row.code}&street=${row.number}+${row.street}`;
     fetch(url)
         .then(response => response.json())
@@ -76,11 +76,18 @@ const setCoordinates = (row, prevData, setData) => {
                 let firstHit = data[0];
                 row.lat = firstHit.lat;
                 row.lon = firstHit.lon;
-                console.log(row);
-                prevData.push(row);
-                setData(prevData);
+                effect();
             }
         });
 }
+
+
+const diff = (prevData, data) => {
+    let prevDataId = prevData.map(x => x.id);
+    let [added, present] = partition(data, x => !prevDataId.includes(x.id));
+    let [updated, untouched] = partition(present,x => !prevData.find(y => _.isEqual(x, y)))
+    return [added, updated, untouched];
+}
+
 
 export default TourItems
