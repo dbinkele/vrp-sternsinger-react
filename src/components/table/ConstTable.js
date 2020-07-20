@@ -43,5 +43,7 @@ export const cols = [
     {title: 'Street', field: 'street'},
     {title: 'Number', field: 'number'},
     {title: 'Name', field: 'name'},
-    {title: 'Hint', field: 'hint'}
+    {title: 'Hint', field: 'hint'},
+    {title: 'Latitude', field: 'lat'},
+    {title: 'Longitude', field: 'lon'}
 ]

@@ -10,9 +10,6 @@ const TourResult = () => {
     const [routeId] = useContext(RouteIdContext);
 
     useEffect(() => {
-        console.log("Da value is " + routeId)
-
-        //let url = 'http://localhost:5000/data';
         fetch(url() + 'vrp?job=' + routeId)
             .then(response => response.json())
             .then(data => {
@@ -34,10 +31,8 @@ const TourResult = () => {
                 icons={tableIcons}
                 title="Computed Tour Result"
                 columns={[
-                    ...cols,
                     {title: 'Id', field: 'id'},
-                    {title: 'Latitude', field: 'lat'},
-                    {title: 'Longitude', field: 'lon'},
+                    ...cols
                 ]}
                 data={data.routes}
             />
