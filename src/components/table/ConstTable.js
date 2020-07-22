@@ -36,12 +36,53 @@ export const tableIcons = {
     ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref}/>)
 };
 
+const onlyNumbersInString = (str) => {
+    let pattern = /^\d+$/;
+    return pattern.test(str);  // returns a boolean
+}
+
+const isObligatory = (data) => {
+    if (!data || data === "") {
+        return {isValid: false, helperText: 'Is obligatory'}
+    }
+    return {isValid: true}
+}
+const validatePostalCode = (code) => {
+    let obligatory = isObligatory(code);
+    if (!obligatory.isValid) return obligatory;
+    if (!onlyNumbersInString(code)) {
+        return {isValid: false, helperText: 'Only Numbers!'}
+    }
+    if (code.length !== 5) {
+        return {isValid: false, helperText: 'Exactly 5 digits'}
+    }
+    return {isValid: true}
+}
+
+const validateNumber = (data) => {
+    let obligatory = isObligatory(data);
+    if (!obligatory.isValid) return obligatory;
+    if (!onlyNumbersInString(data)) {
+        return {isValid: false, helperText: 'Only Numbers!'}
+    }
+    return {isValid: true}
+}
 
 export const cols = [
-    {title: 'Postal Code', field: 'code'},
+    {
+        title: 'Postal Code',
+        field: 'code',
+        validate: rowData => validatePostalCode(rowData.code),
+    },
     {title: 'City', field: 'city'},
-    {title: 'Street', field: 'street'},
-    {title: 'Number', field: 'number'},
+    {
+        title: 'Street', field: 'street',
+        validate: rowData => isObligatory(rowData.street),
+    },
+    {
+        title: 'Number', field: 'number',
+        validate: row => validateNumber(row.number)
+    },
     {title: 'Name', field: 'name'},
     {title: 'Hint', field: 'hint'},
     {title: 'Latitude', field: 'lat'},

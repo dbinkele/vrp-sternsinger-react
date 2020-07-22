@@ -16,7 +16,6 @@ const TourItems = () => {
             [...added, ...updated].forEach(row => {
                 setCoordinates(row, () => {
                     untouched.push(row);
-                    //ToDo sort does not work
                     setData(untouched.sort((x, y) => uuidCompare(x.id, y.id)));
                 })
             });
@@ -45,7 +44,7 @@ const TourItems = () => {
                             const dataUpdate = [...data];
                             const index = oldData.tableData.id;
                             dataUpdate[index] = newData;
-                            setData([...dataUpdate]);
+                            setData(dataUpdate);
 
                             resolve();
                         }, 100)

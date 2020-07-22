@@ -5,6 +5,7 @@ import TourResult from './table/TourResult'
 import RoutesIdForm from "./RoutesIdForm";
 import {RouteIdProvider} from "./RouteIdContext";
 import TourItems from "./table/TourItems";
+import Validation from "./table/Validation";
 
 const useStyles = makeStyles(theme => ({
     toolbar: theme.mixins.toolbar,
@@ -33,6 +34,7 @@ function MainContent() {
             </div>
             <div className={classes.content}>
                 <RouteIdProvider>
+                    <Validation />
                     <TourItems />
                     <RoutesIdForm />
                     <TourResult />
