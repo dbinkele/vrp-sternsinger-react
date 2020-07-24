@@ -68,23 +68,37 @@ const validateNumber = (data) => {
     return {isValid: true}
 }
 
+
+const round = (data, dec) => {
+    return !!data ? parseFloat(data).toFixed(5) : "";
+}
+
 export const cols = [
     {
         title: 'Postal Code',
         field: 'code',
         validate: rowData => validatePostalCode(rowData.code),
     },
-    {title: 'City', field: 'city'},
     {
-        title: 'Street', field: 'street',
+        title: 'City', field: 'city', cwidth: 'auto'
+    },
+    {
+        title: 'Street', field: 'street', cellStyle: {wordBreak: 'break-all'},
         validate: rowData => isObligatory(rowData.street),
     },
     {
-        title: 'Number', field: 'number',
-        validate: row => validateNumber(row.number)
+        title: 'Number', field: 'number', type: 'numeric',
+        validate: rowData => rowData.number <= 0 ? {isValid: false, helperText: 'must be greater zero'} : true,
     },
     {title: 'Name', field: 'name'},
     {title: 'Hint', field: 'hint'},
-    {title: 'Latitude', field: 'lat'},
-    {title: 'Longitude', field: 'lon'}
+    {
+        title: 'Latitude', field: 'lat', editable: 'never',
+        render: rowData => round(rowData.lat, 4)
+    }
+    ,
+    {
+        title: 'Longitude', field: 'lon', editable: 'never',
+        render: rowData => round(rowData.lon, 4)
+    }
 ]

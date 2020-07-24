@@ -40,6 +40,23 @@ export const uuidCompare = (a, b) => {
     return a < b ? -1 : (a > b ? 1 : 0);
 }
 
+const _ = require('lodash/core');
+export const diff = (prevData, data) => {
+    let prevDataId = prevData.map(x => x.id);
+    let [added, present] = partition(data, x => !prevDataId.includes(x.id));
+    let [updated, untouched] = partition(present, x => !prevData.find(y => _.isEqual(x, y)))
+    return [added, updated, untouched];
+}
+
+export const round = (num, dec) => {
+
+    if ((typeof num !== 'number') || (typeof dec !== 'number'))
+        return false;
+
+    var num_sign = num >= 0 ? 1 : -1;
+
+    return (Math.round((num*Math.pow(10,dec))+(num_sign*0.0001))/Math.pow(10,dec)).toFixed(dec);
+}
 // Hook
 export const usePrevious = (value) => {
     // The ref object is a generic container whose current property is mutable ...
