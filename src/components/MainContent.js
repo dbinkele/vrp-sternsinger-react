@@ -5,6 +5,7 @@ import TourResult from './input/TourResult'
 import RoutesIdForm from "./RoutesIdForm";
 import {RouteIdProvider} from "./RouteIdContext";
 import TourItems from "./input/TourItems";
+import TourOptions from "./input/TourOptions";
 
 const useStyles = makeStyles(theme => ({
     toolbar: theme.mixins.toolbar,
@@ -33,6 +34,7 @@ function MainContent() {
             </div>
             <div className={classes.content}>
                 <TourItems />
+                <TourOptions />
              {/*   <RouteIdProvider>
                     <RoutesIdForm />
                     <TourResult />
