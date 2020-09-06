@@ -1,9 +1,6 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Typography } from '@material-ui/core';
-import TourResult from './input/TourResult'
-import RoutesIdForm from "./RoutesIdForm";
-import {RouteIdProvider} from "./RouteIdContext";
 import TourItems from "./input/TourItems";
 import TourOptions from "./input/TourOptions";
 

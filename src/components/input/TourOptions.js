@@ -6,19 +6,28 @@ import {useForm} from "react-hook-form";
 import Alert from '@material-ui/lab/Alert';
 
 
+import 'react-dual-listbox/lib/react-dual-listbox.css';
+//import {ErrorMessage} from '@hookform/error-message';
+
+
+import TourItemSelection from "./components/TourItemsSelection/TourItemSelection";
+import {TourItemProvider} from "./components/TourItemsSelection/TourItemsSelectionContext";
+import TourItemsSelection from "./components/TourItemsSelection/TourItemSelection";
+import TransferList from "./components/TransferList";
+
+
 const TourOptionsForm = props => {
-    const {register, handleSubmit, errors} = useForm();
+    const {register, control, handleSubmit, errors} = useForm();
     const onSubmit = (data, e) => {
         e.preventDefault();
         console.log(data);
     };
     // alert(JSON.stringify(data, null));
-
     return (
         <Fragment>
             <form onSubmit={handleSubmit(onSubmit)} noValidate>
                 <TextField
-                    id="outlined-email-input-required"
+                    id="emial"
                     label="Email address"
                     type="email"
                     name="email"
@@ -37,6 +46,14 @@ const TourOptionsForm = props => {
                     }
                 />
                 {errorHighlight(errors.email)}
+                {/*<ErrorMessage*/}
+                {/*    errors={errors}*/}
+                {/*    name="email"*/}
+                {/*    render={({message}) =>*/}
+                {/*        <div className="error"> {message} </div>*/}
+                {/*    }*/}
+                {/*/>*/}
+
                 <TextField
                     id="timeout"
                     label="Timout Minutes"
@@ -44,6 +61,7 @@ const TourOptionsForm = props => {
                     name="timeout"
                     margin="normal"
                     variant="outlined"
+                    defaultValue={3}
                     error={!!errors.timeout}
                     inputRef={
                         register(
@@ -54,6 +72,7 @@ const TourOptionsForm = props => {
                             })}
                 />
                 {errorHighlight(errors.timeout)}
+
                 <TextField
                     id="vehicles"
                     label="Number of Vehicles"
@@ -61,6 +80,7 @@ const TourOptionsForm = props => {
                     name="vehicles"
                     margin="normal"
                     variant="outlined"
+                    defaultValue={1}
                     error={!!errors.vehicles}
                     inputRef={
                         register(
@@ -71,6 +91,47 @@ const TourOptionsForm = props => {
                             })}
                 />
                 {errorHighlight(errors.vehicles)}
+
+                <TextField
+                    id="weight_visits"
+                    label="Importance of Tour Length Equality"
+                    type="number"
+                    name="weight_visits"
+                    margin="normal"
+                    variant="outlined"
+                    defaultValue={1}
+                    error={!!errors.weight_visits}
+                    inputRef={
+                        register(
+                            {
+                                required: "Please specify Importance",
+                                min: {value: 0, message: "Must be greater zero."},
+                                max: {value: 100, message: "More than 100 not supported."}
+                            })}
+                />
+                {errorHighlight(errors.weight_visits)}
+
+                <TextField
+                    id="weight_lenght"
+                    label="Importance of Total Time Travelled"
+                    type="number"
+                    name="weight_length"
+                    margin="normal"
+                    variant="outlined"
+                    defaultValue={1}
+                    error={!!errors.weight_length}
+                    inputRef={
+                        register(
+                            {
+                                required: "Please specify Importance",
+                                min: {value: 0, message: "Must be greater zero."},
+                                max: {value: 100, message: "More than 100 not supported."}
+                            })}
+                />
+                {errorHighlight(errors.weight_length)}
+
+                {/*{TourItemsSelection(control)}*/}
+                <TransferList leftStuff={TransferListData} onChange={x => console.log("----------> daX " + x)}/>
                 <Button type="submit" size="large" variant="contained">
                     Next
                 </Button>
@@ -78,6 +139,12 @@ const TourOptionsForm = props => {
         </Fragment>
     );
 };
+
+const TransferListData = [
+    {id: 1, label: "Bongo in heaven with dope"},
+    {id: 2, label: "Bango"}
+]
+
 
 const errorHighlight = (err) => {
     return (
@@ -87,7 +154,7 @@ const errorHighlight = (err) => {
                 open={true}
                 autoHideDuration={6000}
                 anchorOrigin={{
-                    vertical: 'center',
+                    vertical: 'top',
                     horizontal: 'left',
                 }}
             >
