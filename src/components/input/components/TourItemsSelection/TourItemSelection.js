@@ -1,13 +1,13 @@
 import React, {useState, useContext} from "react";
-import {TourItemProvider} from './TourItemsSelectionContext'
+import {TourItemSelectionProvider} from './TourItemsSelectionContext'
 import Countries from "./Countries";
 import ChipsArray from "./ChipsArray";
 
 const TourItemsSelection = (control) => {
-    return <TourItemProvider>
+    return <TourItemSelectionProvider>
         <Countries control={control}/>
         <ChipsArray/>
-    </TourItemProvider>;
+    </TourItemSelectionProvider>;
 
 }
 

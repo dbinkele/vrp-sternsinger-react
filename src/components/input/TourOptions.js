@@ -11,10 +11,9 @@ import 'react-dual-listbox/lib/react-dual-listbox.css';
 
 
 import TourItemSelection from "./components/TourItemsSelection/TourItemSelection";
-import {TourItemProvider} from "./components/TourItemsSelection/TourItemsSelectionContext";
+import {TourItemSelectionProvider} from "./components/TourItemsSelection/TourItemsSelectionContext";
 import TourItemsSelection from "./components/TourItemsSelection/TourItemSelection";
 import TransferList from "./components/TransferList";
-
 
 const TourOptionsForm = props => {
     const {register, control, handleSubmit, errors} = useForm();
@@ -26,6 +25,10 @@ const TourOptionsForm = props => {
     return (
         <Fragment>
             <form onSubmit={handleSubmit(onSubmit)} noValidate>
+
+                <TransferList leftStuff={[]} onChange={x => console.log("----------> daX " + x)}/>
+
+
                 <TextField
                     id="emial"
                     label="Email address"
@@ -130,8 +133,6 @@ const TourOptionsForm = props => {
                 />
                 {errorHighlight(errors.weight_length)}
 
-                {/*{TourItemsSelection(control)}*/}
-                <TransferList leftStuff={TransferListData} onChange={x => console.log("----------> daX " + x)}/>
                 <Button type="submit" size="large" variant="contained">
                     Next
                 </Button>

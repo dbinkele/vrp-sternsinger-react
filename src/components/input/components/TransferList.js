@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useContext, useEffect} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import List from '@material-ui/core/List';
@@ -8,6 +8,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Checkbox from '@material-ui/core/Checkbox';
 import Button from '@material-ui/core/Button';
 import Paper from '@material-ui/core/Paper';
+import {TourItemsCtx} from "./TourItems/TourItemsContext";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -40,6 +41,14 @@ const TransferList= ({leftStuff, onChange}) => {
     const leftChecked = intersection(checked, left);
     const rightChecked = intersection(checked, right);
 
+
+    const [tourItems, setTouItems] = useContext(TourItemsCtx);
+    useEffect(() => {
+        console.log("------> TorItems " + tourItems)
+        handleAllLeft();
+        setLeft([...tourItems])
+    }, [tourItems]);
+
     const handleToggle = (value) => () => {
         const currentIndex = checked.indexOf(value);
         const newChecked = [...checked];
@@ -71,9 +80,9 @@ const TransferList= ({leftStuff, onChange}) => {
     const handleCheckedLeft = () => {
         setLeft(left.concat(rightChecked));
         let rightValue = not(right, rightChecked);
+        onChange(rightValue);
         setRight(rightValue);
         setChecked(not(checked, rightChecked));
-        onChange(rightValue);
     };
 
     const handleAllLeft = () => {

@@ -1,11 +1,11 @@
-import React, {useState} from "react";
+import React, {useState, useContext} from "react";
 import MaterialTable from "material-table";
-import {cols, tableIcons} from './ConstTable'
-
-
+import {cols, tableIcons} from '../../ConstTable'
+import {TourItemsCtx} from './TourItemsContext'
+import {timeorderedUuid} from "../../../../util/tools";
 
 const TourItems = () => {
-    const [data, setData] = useState([]);
+    const [tourItems, setTourItems] = useContext(TourItemsCtx);
 
     return (
         <MaterialTable
@@ -13,14 +13,16 @@ const TourItems = () => {
             icons={tableIcons}
             title="Tour Items"
             columns={cols}
-            data={data}
+            data={tourItems}
             editable={{
                 onRowAdd: newData =>
                     new Promise((resolve, reject) => {
                         setTimeout( () => {
                             withCoordinates(newData,
                                 () => {
-                                    setData([...data, newData]);
+                                    newData.id = timeorderedUuid();
+                                    newData.label = newData.code + '/' + newData.street + '/' + newData.number
+                                    setTourItems([...tourItems, newData]);
                                     resolve();
                             },
                                 reject);
@@ -30,10 +32,10 @@ const TourItems = () => {
                     new Promise((resolve, reject) => {
                         setTimeout(() => {
                             withCoordinates(newData, () => {
-                                const dataUpdate = [...data];
+                                const dataUpdate = [...tourItems];
                                 const index = oldData.tableData.id;
                                 dataUpdate[index] = newData;
-                                setData(dataUpdate);
+                                setTourItems(dataUpdate);
                                 resolve();
                             }, reject)
                         }, 10)
@@ -41,10 +43,10 @@ const TourItems = () => {
                 onRowDelete: oldData =>
                     new Promise((resolve, reject) => {
                         setTimeout(() => {
-                            const dataDelete = [...data];
+                            const dataDelete = [...tourItems];
                             const index = oldData.tableData.id;
                             dataDelete.splice(index, 1);
-                            setData([...dataDelete]);
+                            setTourItems([...dataDelete]);
 
                             resolve()
                         }, 100)

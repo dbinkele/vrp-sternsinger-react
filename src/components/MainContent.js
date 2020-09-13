@@ -1,8 +1,13 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import { Typography } from '@material-ui/core';
-import TourItems from "./input/TourItems";
+import {makeStyles} from '@material-ui/core/styles';
+import {Typography} from '@material-ui/core';
+import TourItems from "./input/components/TourItems/TourItems";
 import TourOptions from "./input/TourOptions";
+import {TourItemProvider} from './input/components/TourItems/TourItemsContext'
+import {RouteIdProvider} from "./RouteIdContext";
+import RoutesIdForm from "./RoutesIdForm";
+import TourResult from "./input/TourResult";
+
 
 const useStyles = makeStyles(theme => ({
     toolbar: theme.mixins.toolbar,
@@ -25,18 +30,20 @@ function MainContent() {
 
     return (
         <main className={classes.fullWidth}>
-            <div className={classes.toolbar} />
+            <div className={classes.toolbar}/>
             <div className={classes.title}>
                 <Typography variant='h6'>Title</Typography>
             </div>
             <div className={classes.content}>
-                <TourItems />
-                <TourOptions />
-             {/*   <RouteIdProvider>
-                    <RoutesIdForm />
-                    <TourResult />
+                <TourItemProvider>
+                    <TourItems/>
+                    <TourOptions/>
+                </TourItemProvider>
+                <RouteIdProvider>
+                    <RoutesIdForm/>
+                    <TourResult/>
                 </RouteIdProvider>
-*/}            </div>
+            </div>
         </main>
     );
 }

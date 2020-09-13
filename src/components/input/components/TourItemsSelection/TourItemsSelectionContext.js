@@ -2,7 +2,7 @@ import React, {useState, createContext} from 'react';
 
 export const TourItemsSelectionContext = createContext('');
 
-export const TourItemProvider = (props) => {
+export const TourItemSelectionProvider = (props) => {
     const [tourItems, setTourItems] = useState([
         // { key: 0, label: 'Angular' },
         // { key: 1, label: 'jQuery' },
