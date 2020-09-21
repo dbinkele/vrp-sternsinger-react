@@ -7,27 +7,36 @@ import Alert from '@material-ui/lab/Alert';
 
 
 import 'react-dual-listbox/lib/react-dual-listbox.css';
-//import {ErrorMessage} from '@hookform/error-message';
 
 
-import TourItemSelection from "./components/TourItemsSelection/TourItemSelection";
-import {TourItemSelectionProvider} from "./components/TourItemsSelection/TourItemsSelectionContext";
-import TourItemsSelection from "./components/TourItemsSelection/TourItemSelection";
 import TransferList from "./components/TourItemsSubSel/TransferList";
-import Grid from "@material-ui/core/Grid";
-import TourItemSubSelection from "./components/TourItemsSubSel/TourItemsSubSelection";
-import {TourItemsCtx} from "./components/TourItems/TourItemsContext";
+
 import TodoApp from "./components/ToDoList/ToDo";
-import ChipsArray from "./components/TourItemsSelection/ChipsArray";
+
+import MultiChipSelectWrapper from "./components/MultiChip/MultiChipSelectWrapper"
 
 const TourOptionsForm = props => {
     const {register, control, handleSubmit, errors} = useForm();
-    const [tourItems, setTouItems] = useContext(TourItemsCtx);
 
     const onSubmit = (data, e) => {
         e.preventDefault();
         console.log(data);
     };
+
+    return (
+        <Fragment>
+            <form onSubmit={handleSubmit(onSubmit)} noValidate>
+
+                <TodoApp/>
+                {/*<TransferList leftStuff={[]} onChange={x => console.log("----------> daX " + x)}/>*/}
+                {textBoxes()}
+
+                <Button type="submit" size="large" variant="contained">
+                    Next
+                </Button>
+            </form>
+        </Fragment>
+    );
 
     function textBoxes() {
         return <>
@@ -129,21 +138,6 @@ const TourOptionsForm = props => {
             {errorHighlight(errors.weight_length)}
         </>;
     }
-
-    return (
-        <Fragment>
-            <form onSubmit={handleSubmit(onSubmit)} noValidate>
-                <TodoApp/>
-
-                <TransferList leftStuff={[]} onChange={x => console.log("----------> daX " + x)}/>
-                {textBoxes()}
-
-                <Button type="submit" size="large" variant="contained">
-                    Next
-                </Button>
-            </form>
-        </Fragment>
-    );
 };
 
 
