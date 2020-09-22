@@ -9,11 +9,9 @@ import Alert from '@material-ui/lab/Alert';
 import 'react-dual-listbox/lib/react-dual-listbox.css';
 
 
-import TransferList from "./components/TourItemsSubSel/TransferList";
 
 import TodoApp from "./components/ToDoList/ToDo";
 
-import MultiChipSelectWrapper from "./components/MultiChip/MultiChipSelectWrapper"
 
 const TourOptionsForm = props => {
     const {register, control, handleSubmit, errors} = useForm();

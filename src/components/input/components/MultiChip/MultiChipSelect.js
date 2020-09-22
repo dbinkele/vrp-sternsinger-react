@@ -91,6 +91,43 @@ const getSuggestions = (inputValue, itemList) =>
 function MultiChipSelect(props) {
     const {classes, availableItems, onRemoveItem, ...rest} = props;
 
+    function downshiftContent(selectedItem, getInputProps, toggleMenu, isOpen, inputValue, getItemProps, highlightedIndex) {
+        return <div>
+            {renderChipList({
+                classes,
+                onRemoveItem,
+                selectedItem
+            })}
+
+            {renderInput({
+                classes,
+                selectedItem,
+                availableItems,
+                InputProps: {
+                    ...getInputProps({
+                        onClick: () => toggleMenu()
+                    })
+                }
+            })}
+
+            {isOpen && (
+                <Paper className={classes.paper} square>
+                    {getSuggestions(inputValue, availableItems).map((item, index) =>
+                        renderSuggestion({
+                            item,
+                            index,
+                            itemProps: getItemProps({
+                                item: item.name
+                            }),
+                            highlightedIndex,
+                            selectedItem
+                        })
+                    )}
+                </Paper>
+            )}
+        </div>;
+    }
+
     return (
         <Downshift {...rest}>
             {({
@@ -101,42 +138,7 @@ function MultiChipSelect(props) {
                   highlightedIndex,
                   toggleMenu,
                   isOpen
-              }) => (
-                <div>
-                    {renderChipList({
-                        classes,
-                        onRemoveItem,
-                        selectedItem
-                    })}
-
-                    {renderInput({
-                        classes,
-                        selectedItem,
-                        availableItems,
-                        InputProps: {
-                            ...getInputProps({
-                                onClick: () => toggleMenu()
-                            })
-                        }
-                    })}
-
-                    {isOpen && (
-                        <Paper className={classes.paper} square>
-                            {getSuggestions(inputValue, availableItems).map((item, index) =>
-                                renderSuggestion({
-                                    item,
-                                    index,
-                                    itemProps: getItemProps({
-                                        item: item.name
-                                    }),
-                                    highlightedIndex,
-                                    selectedItem
-                                })
-                            )}
-                        </Paper>
-                    )}
-                </div>
-            )}
+              }) => downshiftContent(selectedItem, getInputProps, toggleMenu, isOpen, inputValue, getItemProps, highlightedIndex)}
         </Downshift>
     );
 }
