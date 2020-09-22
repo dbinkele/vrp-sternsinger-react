@@ -44,7 +44,6 @@ function MainContent() {
                     <RoutesIdForm/>
                     <TourResult/>
                 </RouteIdProvider>
-                <MultiChipSelectWrapper/>
             </div>
         </main>
     );

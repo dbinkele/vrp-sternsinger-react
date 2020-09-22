@@ -11,6 +11,7 @@ import 'react-dual-listbox/lib/react-dual-listbox.css';
 
 
 import TodoApp from "./components/ToDoList/ToDo";
+import MultiChipSelectWrapper from "./components/MultiChip/MultiChipSelectWrapper";
 
 
 const TourOptionsForm = props => {
@@ -24,7 +25,7 @@ const TourOptionsForm = props => {
     return (
         <Fragment>
             <form onSubmit={handleSubmit(onSubmit)} noValidate>
-
+                <MultiChipSelectWrapper control={control}/>
                 <TodoApp/>
                 {/*<TransferList leftStuff={[]} onChange={x => console.log("----------> daX " + x)}/>*/}
                 {textBoxes()}

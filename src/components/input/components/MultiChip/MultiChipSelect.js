@@ -1,4 +1,5 @@
 import React from "react";
+import { useForm, Controller } from "react-hook-form";
 import {withStyles} from "@material-ui/core/styles";
 import {TextField} from "@material-ui/core";
 import {Paper} from "@material-ui/core";
@@ -89,7 +90,7 @@ const getSuggestions = (inputValue, itemList) =>
     );
 
 function MultiChipSelect(props) {
-    const {classes, availableItems, onRemoveItem, ...rest} = props;
+    const {control, classes, availableItems, onRemoveItem, ...rest} = props;
 
     function downshiftContent(selectedItem, getInputProps, toggleMenu, isOpen, inputValue, getItemProps, highlightedIndex) {
         return <div>
@@ -128,18 +129,25 @@ function MultiChipSelect(props) {
         </div>;
     }
 
+    function getDownshift() {
+        return (
+            <Downshift {...rest}>
+                {({
+                      getInputProps,
+                      getItemProps,
+                      inputValue,
+                      selectedItem,
+                      highlightedIndex,
+                      toggleMenu,
+                      isOpen
+                  }) => downshiftContent(selectedItem, getInputProps, toggleMenu, isOpen, inputValue, getItemProps, highlightedIndex)}
+            </Downshift>
+        );
+    }
+
     return (
-        <Downshift {...rest}>
-            {({
-                  getInputProps,
-                  getItemProps,
-                  inputValue,
-                  selectedItem,
-                  highlightedIndex,
-                  toggleMenu,
-                  isOpen
-              }) => downshiftContent(selectedItem, getInputProps, toggleMenu, isOpen, inputValue, getItemProps, highlightedIndex)}
-        </Downshift>
+        <Controller as={getDownshift()} control={control} name={'downshift'}/>
+
     );
 }
 

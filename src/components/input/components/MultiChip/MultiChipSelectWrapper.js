@@ -14,7 +14,7 @@ const allItems = [
     {id: 7, name: 'Eric'},
 ];
 
-const MultiChipSelectWrapper = () => {
+const MultiChipSelectWrapper = ({control}) => {
 
     const [state, setState] = useState({
         items: allItems,
@@ -64,6 +64,7 @@ const MultiChipSelectWrapper = () => {
             <FormControl>
                 <FormLabel>Find a Star Wars character</FormLabel>
                 <MultiChipSelect
+                    control={control}
                     onInputValueChange={handleChangeInput}
                     inputValue={state.inputValue}
                     availableItems={state.items}
