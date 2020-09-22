@@ -18,7 +18,10 @@ const MultiChipSelectWrapper = ({control}) => {
 
     const [state, setState] = useState({
         items: allItems,
-        selectedItem: []
+        selectedItem: [],
+        isOpen: true,
+        highlightedIndex: null,
+        inputValue: ""
     })
 
 

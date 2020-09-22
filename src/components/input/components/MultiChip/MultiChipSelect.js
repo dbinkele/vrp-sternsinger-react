@@ -1,5 +1,5 @@
-import React from "react";
-import { useForm, Controller } from "react-hook-form";
+import React, {useState} from "react";
+import {useForm, Controller,} from "react-hook-form";
 import {withStyles} from "@material-ui/core/styles";
 import {TextField} from "@material-ui/core";
 import {Paper} from "@material-ui/core";
@@ -12,7 +12,7 @@ const styles = theme => ({
     chipContainer: {
         backgroundColor: "transparent",
         display: "inline-block",
-        marginBottom: 10
+        marginBottom: 10,
     },
     chip: {
         marginTop: 10,
@@ -85,7 +85,7 @@ const renderSuggestion = params => {
 };
 
 const getSuggestions = (inputValue, itemList) =>
-    itemList.filter(item =>
+    itemList.filter(item => item.name != null).filter(item =>
         item.name.toLowerCase().includes(inputValue.toLowerCase())
     );
 
@@ -146,8 +146,7 @@ function MultiChipSelect(props) {
     }
 
     return (
-        <Controller as={getDownshift()} control={control} name={'downshift'}/>
-
+        getDownshift()
     );
 }
 
