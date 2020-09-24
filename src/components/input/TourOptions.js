@@ -25,9 +25,8 @@ const TourOptionsForm = props => {
     return (
         <Fragment>
             <form onSubmit={handleSubmit(onSubmit)} noValidate>
-                <MultiChipSelectWrapper control={control}/>
+
                 <TodoApp/>
-                {/*<TransferList leftStuff={[]} onChange={x => console.log("----------> daX " + x)}/>*/}
                 {textBoxes()}
 
                 <Button type="submit" size="large" variant="contained">

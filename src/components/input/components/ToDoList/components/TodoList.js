@@ -7,7 +7,7 @@ const TodoList = memo(props => (
   <>
     {props.items.length > 0 && (
       <Paper style={{ margin: 16 }}>
-        <List style={{ overflow: "scroll" }}>
+        <List style={{ overflow: "scroll" }} component="div" >
           {props.items.map((todo, idx) => (
             <TodoListItem
               {...todo}

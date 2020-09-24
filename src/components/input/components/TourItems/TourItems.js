@@ -17,14 +17,15 @@ const TourItems = () => {
             editable={{
                 onRowAdd: newData =>
                     new Promise((resolve, reject) => {
-                        setTimeout( () => {
+                        setTimeout(() => {
                             withCoordinates(newData,
                                 () => {
                                     newData.id = timeorderedUuid();
-                                    newData.label = newData.code + '/' + newData.street + '/' + newData.number
+                                    newData.label = newData.code + '/' + newData.street + '. ' + newData.number
+                                    newData.label += !!newData.name ? '/' + newData.name : ''
                                     setTourItems([...tourItems, newData]);
                                     resolve();
-                            },
+                                },
                                 reject);
                         }, 10)
                     }),
@@ -65,7 +66,7 @@ const withCoordinates = (row, resolve, reject) => {
         .then(data => {
             if (data.length > 0) {
                 let firstHit = data[0];
-                if (firstHit.lat !=null && firstHit.lon != null) {
+                if (firstHit.lat != null && firstHit.lon != null) {
                     row.lat = firstHit.lat;
                     row.lon = firstHit.lon;
                     resolve();
@@ -75,8 +76,6 @@ const withCoordinates = (row, resolve, reject) => {
             reject("Wrong Address!")
         })
 }
-
-
 
 
 export default TourItems

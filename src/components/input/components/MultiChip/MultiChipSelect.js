@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import {useForm, Controller,} from "react-hook-form";
-import {withStyles} from "@material-ui/core/styles";
+
 import {TextField} from "@material-ui/core";
 import {Paper} from "@material-ui/core";
 import MenuItem from "@material-ui/core/Menu";
@@ -8,21 +8,6 @@ import Downshift from "downshift";
 import Chip from '@material-ui/core/Chip';
 import CancelIcon from "@material-ui/icons/Cancel";
 
-const styles = theme => ({
-    chipContainer: {
-        backgroundColor: "transparent",
-        display: "inline-block",
-        marginBottom: 10,
-    },
-    chip: {
-        marginTop: 10,
-        marginRight: 5
-    },
-    paper: {
-        maxHeight: "150px",
-        overflowY: "auto"
-    }
-});
 
 const renderInput = inputProps => {
     const {InputProps, classes, availableItems} = inputProps;
@@ -36,12 +21,7 @@ const renderInput = inputProps => {
                 allItemSelected ? "No more character to add" : "Choose a character"
             }
             disabled={allItemSelected}
-            InputProps={{
-                classes: {
-                    input: classes.input
-                },
-                ...InputProps
-            }}
+            InputProps={InputProps}
         />
     );
 };
@@ -49,19 +29,17 @@ const renderInput = inputProps => {
 const renderChipList = inputProps => {
     const {classes, selectedItem, onRemoveItem} = inputProps;
     return (
-        <div className={classes.chipContainer}>
-            {selectedItem.length > 0 &&
             selectedItem.map(item => (
                 <Chip
                     key={item}
-                    className={classes.chip}
+                    //className={classes.chip}
                     label={item}
                     deleteIcon={<CancelIcon/>}
                     onDelete={() => onRemoveItem(item)}
                     onClick={() => onRemoveItem(item)}
                 />
-            ))}
-        </div>
+            ))
+
     );
 };
 
@@ -93,7 +71,7 @@ function MultiChipSelect(props) {
     const {control, classes, availableItems, onRemoveItem, ...rest} = props;
 
     function downshiftContent(selectedItem, getInputProps, toggleMenu, isOpen, inputValue, getItemProps, highlightedIndex) {
-        return <div>
+        return <div >
             {renderChipList({
                 classes,
                 onRemoveItem,
@@ -112,7 +90,7 @@ function MultiChipSelect(props) {
             })}
 
             {isOpen && (
-                <Paper className={classes.paper} square>
+                <Paper  square>
                     {getSuggestions(inputValue, availableItems).map((item, index) =>
                         renderSuggestion({
                             item,
@@ -150,4 +128,4 @@ function MultiChipSelect(props) {
     );
 }
 
-export default withStyles(styles)(MultiChipSelect);
+export default MultiChipSelect;

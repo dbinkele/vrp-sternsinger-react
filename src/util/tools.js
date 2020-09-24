@@ -10,6 +10,13 @@ export const url = () => {
     }
 }
 
+export function not(a, b) {
+    return a.filter((value) => b.indexOf(value) === -1);
+}
+
+export function intersection(a, b) {
+    return a.filter((value) => b.indexOf(value) !== -1);
+}
 
 // diff between just two arrays:
 export const arrayDiff = (a, b) => {

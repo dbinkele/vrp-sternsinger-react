@@ -61,22 +61,16 @@ const MultiChipSelectWrapper = ({control}) => {
     };
 
 
-
     return (
-        <FormGroup>
-            <FormControl>
-                <FormLabel>Find a Star Wars character</FormLabel>
-                <MultiChipSelect
-                    control={control}
-                    onInputValueChange={handleChangeInput}
-                    inputValue={state.inputValue}
-                    availableItems={state.items}
-                    selectedItem={state.selectedItem}
-                    onChange={handleChange}
-                    onRemoveItem={removeSelectedItem}
-                />
-            </FormControl>
-        </FormGroup>
+        <MultiChipSelect
+            control={control}
+            onInputValueChange={handleChangeInput}
+            inputValue={state.inputValue}
+            availableItems={state.items}
+            selectedItem={state.selectedItem}
+            onChange={handleChange}
+            onRemoveItem={removeSelectedItem}
+        />
     )
 
 }

@@ -1,7 +1,9 @@
 import React, {useContext} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Chip from '@material-ui/core/Chip';
-import Paper from '@material-ui/core/Paper';
+import List from "@material-ui/core/List";
+import ListItem from "@material-ui/core/ListItem";
+import HomeWorkTwoToneIcon from '@material-ui/icons/HomeWorkTwoTone';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -17,32 +19,30 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function ChipsArray() {
+const ChipsArray = ({tourItems}) =>  {
     const classes = useStyles();
-    const [tourItems, setTourItems] = React.useState([
-        { key: 0, label: 'Angular' },
-        { key: 1, label: 'jQuery' },
-        { key: 2, label: 'Polymer' },
-        { key: 4, label: 'Vue.js' },
-    ]);
 
-    const handleDelete = (chipToDelete) => () => {
-        setTourItems((chips) => chips.filter((chip) => chip.key !== chipToDelete.key));
-    };
+    // const handleDelete = (chipToDelete) => () => {
+    //     setTourItems((chips) => chips.filter((chip) => chip.key !== chipToDelete.key));
+    // };
 
     return (
-        <Paper component="ul" className={classes.root}>
+
+        <List component="div" className="topContainer">
             {tourItems.map((data) => {
                 return (
-                    <li key={data.key}>
+                    <ListItem key={data.key} button={true}>
                         <Chip
+                            size="small"
+                            icon={<HomeWorkTwoToneIcon />}
                             label={data.label}
-                            onDelete={handleDelete(data)}
                             className={classes.chip}
                         />
-                    </li>
+                    </ListItem>
                 );
             })}
-        </Paper>
+        </List>
     );
 }
+
+export default ChipsArray;

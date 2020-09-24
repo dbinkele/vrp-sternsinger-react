@@ -33,21 +33,13 @@ function intersection(a, b) {
     return a.filter((value) => b.indexOf(value) !== -1);
 }
 
-const TransferList = ({leftStuff, onChange}) => {
+const TransferList = ({left, right, handleAllRight, handleCheckedRight, handleCheckedLeft, handleAllLeft}) => {
     const classes = useStyles();
     const [checked, setChecked] = React.useState([]);
-    const [left, setLeft] = React.useState(leftStuff);
-    const [right, setRight] = React.useState([]);
 
     const leftChecked = intersection(checked, left);
     const rightChecked = intersection(checked, right);
 
-
-    const [tourItems, setTouItems] = useContext(TourItemsCtx);
-    useEffect(() => {
-        handleAllLeft();
-        setLeft([...tourItems])
-    }, [tourItems]);
 
     const handleToggle = (value) => () => {
         const currentIndex = checked.indexOf(value);
@@ -62,50 +54,36 @@ const TransferList = ({leftStuff, onChange}) => {
         setChecked(newChecked);
     };
 
-    const handleAllRight = () => {
-        let rightValue = right.concat(left);
-        setRight(rightValue);
-        setLeft([]);
-        onChange(rightValue);
-    };
 
-    const handleCheckedRight = () => {
-        let rightValue = right.concat(leftChecked);
-        setRight(rightValue);
-        setLeft(not(left, leftChecked));
+
+    const handleCheckedRightInternal = () => {
+        handleCheckedRight(leftChecked);
         setChecked(not(checked, leftChecked));
-        onChange(rightValue);
     };
 
-    const handleCheckedLeft = () => {
-        setLeft(left.concat(rightChecked));
-        let rightValue = not(right, rightChecked);
-        onChange(rightValue);
-        setRight(rightValue);
+    const handleCheckedLeftInernal = () => {
+        handleCheckedLeft(rightChecked);
         setChecked(not(checked, rightChecked));
     };
 
-    const handleAllLeft = () => {
-        setLeft(left.concat(right));
-        setRight([]);
-        onChange([]);
-    };
+
 
     const customList = (items, header) => (
-        <Paper  style={{width: '400px', height: '200px', maxHeight: 'unset', maxWidth: 'unset', overflow: 'auto'}}
+        <Paper  style={{width: '200px', height: '200px', maxHeight: 'unset', maxWidth: 'unset', overflow: 'auto'}}
                className={classes.paper}>
-            <List style={{width: '150%'}} component="div" role="list"
+            <List style={{width: '100%'}} component="div" role="list"
                   subheader={
                       <ListSubheader component="div" id="nested-list-subheader">
                           {header}
                       </ListSubheader>
                   }
+
             >
                 {items.map((value) => {
                     const labelId = value.id;
 
                     return (
-                        <ListItem key={labelId} role="listitem" button onClick={handleToggle(value)}>
+                        <ListItem key={labelId} role="listitem" button={true} onClick={handleToggle(value)}   >
                             <ListItemIcon>
                                 <Checkbox
                                     checked={checked.indexOf(value) !== -1}
@@ -124,8 +102,8 @@ const TransferList = ({leftStuff, onChange}) => {
     );
 
     return (
-        <Grid container spacing={4} justify="center" alignItems="center" direction="row" className={classes.root}>
-            <Grid alignItems="stretch" direction="column" item>{customList(left, 'Available')}</Grid>
+        <Grid container direction="row" className={classes.root}  >
+            <Grid item>{customList(left, 'Available')}</Grid>
             <Grid item>
                 <Grid container direction="column">
                     <Button
@@ -142,7 +120,7 @@ const TransferList = ({leftStuff, onChange}) => {
                         variant="outlined"
                         size="small"
                         className={classes.button}
-                        onClick={handleCheckedRight}
+                        onClick={handleCheckedRightInternal}
                         disabled={leftChecked.length === 0}
                         aria-label="move selected right"
                     >
@@ -152,7 +130,7 @@ const TransferList = ({leftStuff, onChange}) => {
                         variant="outlined"
                         size="small"
                         className={classes.button}
-                        onClick={handleCheckedLeft}
+                        onClick={handleCheckedLeftInernal}
                         disabled={rightChecked.length === 0}
                         aria-label="move selected left"
                     >
@@ -170,7 +148,7 @@ const TransferList = ({leftStuff, onChange}) => {
                     </Button>
                 </Grid>
             </Grid>
-            <Grid alignItems="stretch" direction="column" item>{customList(right, 'Selected')}</Grid>
+            <Grid item>{customList(right, 'Selected')}</Grid>
         </Grid>
     );
 }

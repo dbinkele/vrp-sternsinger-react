@@ -8,3 +8,8 @@
   color: #09d3ac;
 }
 
+.topContainer{
+  display: flex;
+  flex-direction: row;
+}
+
