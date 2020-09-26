@@ -1,20 +1,14 @@
-import React, {Fragment, useContext} from "react";
+import React, {Fragmentt} from "react";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import Snackbar from '@material-ui/core/Snackbar';
 import {useForm} from "react-hook-form";
 import Alert from '@material-ui/lab/Alert';
-
-
 import 'react-dual-listbox/lib/react-dual-listbox.css';
-
-
-
 import TodoApp from "./components/ToDoList/ToDo";
-import MultiChipSelectWrapper from "./components/MultiChip/MultiChipSelectWrapper";
 
 
-const TourOptionsForm = props => {
+const TourOptionsForm = () => {
     const {register, control, handleSubmit, errors} = useForm();
 
     const onSubmit = (data, e) => {
@@ -137,7 +131,6 @@ const TourOptionsForm = props => {
         </>;
     }
 };
-
 
 
 const errorHighlight = (err) => {

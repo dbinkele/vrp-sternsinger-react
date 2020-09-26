@@ -7,7 +7,6 @@ import {TourItemProvider} from './input/components/TourItems/TourItemsContext'
 import {RouteIdProvider} from "./RouteIdContext";
 import RoutesIdForm from "./RoutesIdForm";
 import TourResult from "./input/TourResult";
-import MultiChipSelectWrapper from "./input/components/MultiChip/MultiChipSelectWrapper";
 
 
 const useStyles = makeStyles(theme => ({
@@ -40,6 +39,8 @@ function MainContent() {
                     <TourItems/>
                     <TourOptions/>
                 </TourItemProvider>
+
+
                 <RouteIdProvider>
                     <RoutesIdForm/>
                     <TourResult/>
