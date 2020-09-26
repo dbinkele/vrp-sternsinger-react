@@ -11,7 +11,7 @@ import TourItemsSubset from "../../TourItemsSubSet/TourItemsSubset";
 import {TourItemsCtx} from "../../TourItems/TourItemsContext";
 
 
-const TodoListItem = memo(props => {
+const TodoListItem = memo((props) => {
         const [tourItems, setTourItems] = useContext(TourItemsCtx);
         
         return (<ListItem divider={props.divider} ContainerComponent="div">
@@ -20,6 +20,7 @@ const TodoListItem = memo(props => {
                     checked={props.checked}
                     disableRipple
                 />
+                {props.children}
                 <TourItemsSubset tourItems={tourItems} readOnly={!props.checked}/>
                 <ListItemSecondaryAction component="div">
                     <IconButton aria-label="Delete Todo" onClick={props.onButtonClick}>
