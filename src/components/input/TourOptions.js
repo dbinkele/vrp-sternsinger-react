@@ -1,15 +1,48 @@
-import React, {Fragment} from "react";
+import React, {Fragment, useContext} from "react";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import Snackbar from '@material-ui/core/Snackbar';
 import {useForm} from "react-hook-form";
 import Alert from '@material-ui/lab/Alert';
 import 'react-dual-listbox/lib/react-dual-listbox.css';
-import TodoApp from "./components/ToDoList/ToDo";
+import TodoApp from "./components/ToDoList/ToDo"
+import {makeStyles} from "@material-ui/core/styles";
+import Accordion from "@material-ui/core/Accordion";
+import AccordionSummary from "@material-ui/core/AccordionSummary";
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import Typography from "@material-ui/core/Typography";
+import AccordionDetails from "@material-ui/core/AccordionDetails";
+import Select from 'react-select';
+import {TourItemsCtx} from "./components/TourItems/TourItemsContext";
+import Container from "@material-ui/core/Container";
 
+
+const useStyles = makeStyles((theme) => ({
+    root: {
+        width: '100%',
+    },
+    heading: {
+        fontSize: theme.typography.pxToRem(15),
+        flexBasis: '33.33%',
+        flexShrink: 0,
+    },
+    secondaryHeading: {
+        fontSize: theme.typography.pxToRem(15),
+        color: theme.palette.text.secondary,
+    },
+}));
 
 const TourOptionsForm = () => {
+
+    const [tourItems, setTourItems] = useContext(TourItemsCtx);
     const {register, control, handleSubmit, errors} = useForm();
+
+    const classes = useStyles();
+    const [expanded, setExpanded] = React.useState(false);
+
+    const handleChange = (panel) => (event, isExpanded) => {
+        setExpanded(isExpanded ? panel : false);
+    };
 
     const onSubmit = (data, e) => {
         e.preventDefault();
@@ -20,8 +53,71 @@ const TourOptionsForm = () => {
         <Fragment>
             <form onSubmit={handleSubmit(onSubmit)} noValidate>
 
-                <TodoApp/>
-                {textBoxes()}
+                <div className={classes.root}>
+                    <Accordion expanded={expanded === 'panel1'} onChange={handleChange('panel1')}>
+                        <AccordionSummary
+                            expandIcon={<ExpandMoreIcon/>}
+                            aria-controls="panel1bh-content"
+                            id="panel1bh-header"
+                        >
+                            <Typography className={classes.heading}>General Settings</Typography>
+                            <Typography className={classes.secondaryHeading}>
+                                Basic Driver Values for the algorithm
+                            </Typography>
+                        </AccordionSummary>
+                        <AccordionDetails>
+                            {generalSettings()}
+                            <Container maxWidth="sm">
+                                <Select options={tourItems}/>
+                            </Container>
+                        </AccordionDetails>
+                    </Accordion>
+                    <Accordion expanded={expanded === 'panel2'} onChange={handleChange('panel2')}>
+                        <AccordionSummary
+                            expandIcon={<ExpandMoreIcon/>}
+                            aria-controls="panel2bh-content"
+                            id="panel2bh-header"
+                        >
+                            <Typography className={classes.heading}>Tour Constraints</Typography>
+                            <Typography className={classes.secondaryHeading}>Tour Items who must be on the same
+                                tour</Typography>
+                        </AccordionSummary>
+                        <AccordionDetails>
+                            <TodoApp/>
+                        </AccordionDetails>
+                    </Accordion>
+                    <Accordion expanded={expanded === 'panel3'} onChange={handleChange('panel3')}>
+                        <AccordionSummary
+                            expandIcon={<ExpandMoreIcon/>}
+                            aria-controls="panel3bh-content"
+                            id="panel3bh-header"
+                        >
+                            <Typography className={classes.heading}>Tour Constraints Ordered</Typography>
+                            <Typography className={classes.secondaryHeading}>Tour Items who must NOT be on the same
+                                tour</Typography>
+                        </AccordionSummary>
+                        <AccordionDetails>
+                            <TodoApp/>
+                        </AccordionDetails>
+                    </Accordion>
+
+                    <Accordion expanded={expanded === 'panel4'} onChange={handleChange('panel4')}>
+                        <AccordionSummary
+                            expandIcon={<ExpandMoreIcon/>}
+                            aria-controls="panel4bh-content"
+                            id="panel4bh-header"
+                        >
+                            <Typography className={classes.heading}>Tour Constraints Ordered</Typography>
+                            <Typography className={classes.secondaryHeading}>Tour Items who must be on the same tour
+                                respecting given order</Typography>
+                        </AccordionSummary>
+                        <AccordionDetails>
+                            <TodoApp/>
+                        </AccordionDetails>
+                    </Accordion>
+
+                </div>
+
 
                 <Button type="submit" size="large" variant="contained">
                     Next
@@ -30,10 +126,10 @@ const TourOptionsForm = () => {
         </Fragment>
     );
 
-    function textBoxes() {
+    function generalSettings() {
         return <>
             <TextField
-                id="emial"
+                id="email"
                 label="Email address"
                 type="email"
                 name="email"
@@ -90,6 +186,24 @@ const TourOptionsForm = () => {
                         })}
             />
             {errorHighlight(errors.vehicles)}
+
+            <TextField
+                id="defaultDuration"
+                label="Default Duration Minutes"
+                type="number"
+                name="timeout"
+                margin="normal"
+                variant="outlined"
+                defaultValue={0}
+                error={!!errors.timeout}
+                inputRef={
+                    register(
+                        {
+                            required: "Please specify Timeout",
+                            min: {value: 0, message: "Must be greater zero."},
+                        })}
+            />
+            {errorHighlight(errors.defaultDuration)}
 
             <TextField
                 id="weight_visits"

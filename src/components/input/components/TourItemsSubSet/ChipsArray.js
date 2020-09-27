@@ -12,7 +12,7 @@ const useStyles = makeStyles((theme) => ({
         flexWrap: 'wrap',
         listStyle: 'none',
         padding: theme.spacing(0.5),
-        margin: 0,
+        margin: 0
     },
     chip: {
         margin: theme.spacing(0.5),
@@ -22,13 +22,9 @@ const useStyles = makeStyles((theme) => ({
 const ChipsArray = ({tourItems}) =>  {
     const classes = useStyles();
 
-    // const handleDelete = (chipToDelete) => () => {
-    //     setTourItems((chips) => chips.filter((chip) => chip.key !== chipToDelete.key));
-    // };
-
     return (
 
-        <List component="div" className="topContainer">
+        <List component="div" className="topContainer" width={"100%"}>
             {tourItems.map((data) => {
                 return (
                     <ListItem key={data.key} button={true}>

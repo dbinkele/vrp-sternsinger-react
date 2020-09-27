@@ -1,4 +1,4 @@
-import React, {useState, useContext} from "react";
+import React, {useContext} from "react";
 import MaterialTable from "material-table";
 import {cols, tableIcons} from '../../ConstTable'
 import {TourItemsCtx} from './TourItemsContext'

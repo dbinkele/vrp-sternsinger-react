@@ -47,6 +47,17 @@ const isObligatory = (data) => {
     }
     return {isValid: true}
 }
+
+const validateNumber = (data) => {
+    let obligatory = isObligatory(data);
+    if (!obligatory.isValid) return obligatory;
+    if(data <= 0){
+        return {isValid: false, helperText: 'must be greater zero'}
+    }
+    return {isValid: true}
+}
+
+
 const validatePostalCode = (code) => {
     let obligatory = isObligatory(code);
     if (!obligatory.isValid) return obligatory;
@@ -55,15 +66,6 @@ const validatePostalCode = (code) => {
     }
     if (code.length !== 5) {
         return {isValid: false, helperText: 'Exactly 5 digits'}
-    }
-    return {isValid: true}
-}
-
-const validateNumber = (data) => {
-    let obligatory = isObligatory(data);
-    if (!obligatory.isValid) return obligatory;
-    if (!onlyNumbersInString(data)) {
-        return {isValid: false, helperText: 'Only Numbers!'}
     }
     return {isValid: true}
 }
@@ -88,15 +90,17 @@ export const cols = [
     },
     {
         title: 'Number', field: 'number', type: 'numeric',
-        validate: rowData => rowData.number <= 0 ? {isValid: false, helperText: 'must be greater zero'} : true,
+        validate: rowData => validateNumber(rowData.number),
     },
     {title: 'Name', field: 'name'},
+    {
+        title: 'Duration Minutes', field: 'duration', type: 'numeric',
+    },
     {title: 'Hint', field: 'hint'},
     {
         title: 'Latitude', field: 'lat', editable: 'never',
         render: rowData => round(rowData.lat, 4)
-    }
-    ,
+    },
     {
         title: 'Longitude', field: 'lon', editable: 'never',
         render: rowData => round(rowData.lon, 4)
