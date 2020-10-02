@@ -1,14 +1,15 @@
-import React, {useContext} from "react";
+import React from "react";
 import MaterialTable from "material-table";
 import {cols, tableIcons} from '../../ConstTable'
-import {TourItemsCtx} from './TourItemsContext'
 import {timeorderedUuid} from "../../../../util/tools";
 import {connect} from 'react-redux'
-import {addTourItenActionCreator} from '../../../../modules/actions.js'
+import {
+    addTourItemActionCreator,
+    removeTourItemActionCreator,
+    updateTourItemActionCreator
+} from '../../../../modules/actions.js'
 
 const TourItems = (props) => {
-    const [tourItems2, setTourItems] = useContext(TourItemsCtx);
-
     const {items} = props;
 
     return (
@@ -27,9 +28,7 @@ const TourItems = (props) => {
                                     newData.id = timeorderedUuid();
                                     newData.label = newData.code + '/' + newData.street + '. ' + newData.number
                                     newData.label += !!newData.name ? '/' + newData.name : ''
-                                    let newVar = [...tourItems2, newData];
-                                    //setTourItems(newVar);
-                                    props.addTourItems(newData);
+                                    props.addTourItem(newData);
                                     resolve();
                                 },
                                 reject);
@@ -39,10 +38,8 @@ const TourItems = (props) => {
                     new Promise((resolve, reject) => {
                         setTimeout(() => {
                             withCoordinates(newData, () => {
-                                const dataUpdate = [...tourItems2];
                                 const index = oldData.tableData.id;
-                                dataUpdate[index] = newData;
-                                setTourItems(dataUpdate);
+                                props.updateTourItem(newData, index);
                                 resolve();
                             }, reject)
                         }, 10)
@@ -50,13 +47,10 @@ const TourItems = (props) => {
                 onRowDelete: oldData =>
                     new Promise((resolve, reject) => {
                         setTimeout(() => {
-                            const dataDelete = [...tourItems2];
                             const index = oldData.tableData.id;
-                            dataDelete.splice(index, 1);
-                            setTourItems([...dataDelete]);
-
-                            resolve()
-                        }, 100)
+                            props.removeTourItem(index);
+                            resolve();
+                        }, 10)
                     }),
             }}
         />
@@ -89,5 +83,7 @@ export default connect(state => {
         return {items: tourItems};
     }
     , {
-        addTourItems: addTourItenActionCreator
+        addTourItem: addTourItemActionCreator,
+        removeTourItem: removeTourItemActionCreator,
+        updateTourItem: updateTourItemActionCreator
     })(TourItems)
