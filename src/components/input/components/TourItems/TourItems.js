@@ -7,7 +7,7 @@ import {
     addTourItemActionCreator,
     removeTourItemActionCreator,
     updateTourItemActionCreator
-} from '../../../../modules/actions.js'
+} from '../../../../modules/tourItemsActions.js'
 
 const TourItems = (props) => {
     const {items} = props;

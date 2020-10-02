@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux'
-import {reducer} from "./actions";
+import {reducer} from "./tourItemsActions";
 
 const allReducers = combineReducers({
     reducer

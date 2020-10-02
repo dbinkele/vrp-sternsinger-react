@@ -4,6 +4,9 @@ import Chip from '@material-ui/core/Chip';
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import HomeWorkTwoToneIcon from '@material-ui/icons/HomeWorkTwoTone';
+import {SortableContainer, SortableElement} from 'react-sortable-hoc';
+import arrayMove from 'array-move';
+
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -19,25 +22,39 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
+const onSortEnd = ({oldIndex, newIndex}) => {
+    this.setState(({items}) => ({
+        items: arrayMove(items, oldIndex, newIndex),
+    }));
+};
+
+
 const ChipsArray = ({tourItems}) =>  {
     const classes = useStyles();
 
-    return (
+    const SortableItem = SortableElement(({data}) =>
+        <ListItem key={data.key} button={true}>
+            <Chip
+                size="small"
+                icon={<HomeWorkTwoToneIcon />}
+                label={data.label}
+                className={classes.chip}
+            />
+        </ListItem>);
 
-        <List component="div" className="topContainer" width={"100%"}>
-            {tourItems.map((data) => {
-                return (
-                    <ListItem key={data.key} button={true}>
-                        <Chip
-                            size="small"
-                            icon={<HomeWorkTwoToneIcon />}
-                            label={data.label}
-                            className={classes.chip}
-                        />
-                    </ListItem>
-                );
-            })}
-        </List>
+    const SortableList = SortableContainer(({items}) => {
+        return (
+            <List component="div" className="topContainer" width={"100%"}>
+                {items.map((value, index) => (
+                    <SortableItem key={`item-${value}`} index={index} value={value} />
+                ))}
+            </List>
+        );
+    });
+
+
+    return (
+        <SortableList items={tourItems} onSortEnd={onSortEnd} />
     );
 }
 

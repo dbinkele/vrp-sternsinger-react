@@ -6,7 +6,7 @@ import * as serviceWorker from './serviceWorker';
 import {Provider} from 'react-redux'
 import {createStore} from 'redux'
 import allReducers from "./modules";
-import {reducer} from "./modules/actions";
+import {reducer} from "./modules/tourItemsActions";
 
 ReactDOM.render(
     <Provider store={createStore(
