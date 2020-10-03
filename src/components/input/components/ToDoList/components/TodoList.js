@@ -5,6 +5,12 @@ import TodoListItem from "./TodoListItem";
 import TourItemsSubset from "../../TourItemsSubSet/TourItemsSubset";
 import {TourItemsCtx} from "../../TourItems/TourItemsContext";
 import makeStyles from "@material-ui/core/styles/makeStyles";
+import {connect} from "react-redux";
+import {
+    addTourItemActionCreator,
+    removeTourItemActionCreator,
+    updateTourItemActionCreator
+} from "../../../../../modules/tourItemsActions";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -22,14 +28,13 @@ const TodoList = memo(props => {
         const classes = useStyles();
         return (
             <>
-                {props.items.length > 0 && (
-
+                {props.todos.length > 0 && (
                     <List className={classes.root} component="div">
-                        {props.items.map((todo, idx) => (
+                        {props.todos.map((todo, idx) => (
                             <TodoListItem
-                                {...todo}
+                                {...{...todo, ...props}}
                                 key={`TodoItem.${idx}`}
-                                divider={idx !== props.items.length - 1}
+                                divider={idx !== props.todos.length - 1}
                                 onButtonClick={() => props.onItemRemove(idx)}
                                 onCheckBoxToggle={() => props.onItemCheck(idx)}
                             />
@@ -42,4 +47,6 @@ const TodoList = memo(props => {
     }
 );
 
-export default TodoList;
+export default connect(state => {
+    return state;
+}, null)(TodoList);

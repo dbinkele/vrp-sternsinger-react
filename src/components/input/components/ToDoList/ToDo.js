@@ -10,6 +10,13 @@ import TourItemsSubset from "../TourItemsSubSet/TourItemsSubset";
 import {TourItemsCtx} from "../TourItems/TourItemsContext";
 import Grid from "@material-ui/core/Grid";
 import makeStyles from "@material-ui/core/styles/makeStyles";
+import {connect} from "react-redux";
+import {
+    addTourItemActionCreator,
+    removeTourItemActionCreator,
+    updateTourItemActionCreator
+} from "../../../../modules/tourItemsActions";
+
 const useStyles = makeStyles((theme) => ({
     root: {
         width: '100%',
@@ -17,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const TodoApp =
-    memo(props => {
+    memo((props) => {
         const {todos, addTodo, checkTodo, removeTodo} = useTodos();
         const classes = useStyles();
 
@@ -34,9 +41,9 @@ const TodoApp =
                         addTodo();
                     }}/>
                 </Grid>
-                <Grid item xs={12} >
+                <Grid item xs={12}>
                     <TodoList
-                        items={todos}
+                        {...{todos: todos, ...props}}
                         onItemCheck={idx => checkTodo(idx)}
                         onItemRemove={idx => removeTodo(idx)}
                     >
@@ -47,4 +54,6 @@ const TodoApp =
     })
 
 
-export default TodoApp;
+export default connect(state => {
+    return state;
+}, null)(TodoApp);

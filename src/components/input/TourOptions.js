@@ -12,7 +12,12 @@ import AccordionSummary from "@material-ui/core/AccordionSummary";
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Typography from "@material-ui/core/Typography";
 import AccordionDetails from "@material-ui/core/AccordionDetails";
-
+import {connect} from "react-redux";
+import {
+    addTourItemActionCreator,
+    removeTourItemActionCreator,
+    updateTourItemActionCreator
+} from "../../modules/tourItemsActions";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -30,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const TourOptionsForm = () => {
+const TourOptionsForm = (props) => {
 
     const {register, control, handleSubmit, errors} = useForm();
 
@@ -80,7 +85,7 @@ const TourOptionsForm = () => {
                                 tour</Typography>
                         </AccordionSummary>
                         <AccordionDetails>
-                            <TodoApp/>
+                            <TodoApp props/>
                         </AccordionDetails>
                     </Accordion>
                     <Accordion expanded={expanded === 'panel3'} onChange={handleChange('panel3')}>
@@ -94,7 +99,7 @@ const TourOptionsForm = () => {
                                 tour</Typography>
                         </AccordionSummary>
                         <AccordionDetails>
-                            <TodoApp/>
+                            <TodoApp props/>
                         </AccordionDetails>
                     </Accordion>
 
@@ -109,7 +114,7 @@ const TourOptionsForm = () => {
                                 respecting given order</Typography>
                         </AccordionSummary>
                         <AccordionDetails>
-                            <TodoApp/>
+                            <TodoApp props/>
                         </AccordionDetails>
                     </Accordion>
 
@@ -264,4 +269,6 @@ const errorHighlight = (err) => {
     );
 }
 
-export default TourOptionsForm;
+export default connect(state => {
+    return state;
+}, null)(TourOptionsForm);
