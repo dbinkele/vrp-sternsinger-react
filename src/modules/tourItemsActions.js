@@ -31,8 +31,13 @@ export const updateTourItemActionCreator = (item, index) => {
 }
 
 
-export const reducer = handleActions({
+export const tourItemsReducer = handleActions({
         [ADD_TOUR_ITEM]: (state, action) => {
+            if (state.tourItems == null){
+                return {
+                    tourItems: [action.payload]
+                };
+            }
             return {
                 tourItems: [...state.tourItems, action.payload]
             };

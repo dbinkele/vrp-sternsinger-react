@@ -79,7 +79,7 @@ const withCoordinates = (row, resolve, reject) => {
 
 
 export default connect(state => {
-        const {tourItems} = state;
+        const {tourItems} = state.tourItemsReducer;
         return {items: tourItems};
     }
     , {

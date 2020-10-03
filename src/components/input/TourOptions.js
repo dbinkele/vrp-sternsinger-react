@@ -1,4 +1,4 @@
-import React, {Fragment, useContext} from "react";
+import React, {Fragment} from "react";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import Snackbar from '@material-ui/core/Snackbar';
@@ -12,9 +12,7 @@ import AccordionSummary from "@material-ui/core/AccordionSummary";
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Typography from "@material-ui/core/Typography";
 import AccordionDetails from "@material-ui/core/AccordionDetails";
-import Select from 'react-select';
-import {TourItemsCtx} from "./components/TourItems/TourItemsContext";
-import Container from "@material-ui/core/Container";
+
 
 
 const useStyles = makeStyles((theme) => ({
@@ -34,7 +32,6 @@ const useStyles = makeStyles((theme) => ({
 
 const TourOptionsForm = () => {
 
-    const [tourItems, setTourItems] = useContext(TourItemsCtx);
     const {register, control, handleSubmit, errors} = useForm();
 
     const classes = useStyles();
@@ -67,9 +64,9 @@ const TourOptionsForm = () => {
                         </AccordionSummary>
                         <AccordionDetails>
                             {generalSettings()}
-                            <Container maxWidth="sm">
-                                <Select options={tourItems}/>
-                            </Container>
+                            {/*<Container maxWidth="sm">*/}
+                            {/*    <Select options={tourItems}/>*/}
+                            {/*</Container>*/}
                         </AccordionDetails>
                     </Accordion>
                     <Accordion expanded={expanded === 'panel2'} onChange={handleChange('panel2')}>

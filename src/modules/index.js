@@ -1,8 +1,8 @@
 import { combineReducers } from 'redux'
-import {reducer} from "./tourItemsActions";
+import {tourItemsReducer} from "./tourItemsActions";
 
 const allReducers = combineReducers({
-    reducer
+    tourItemsReducer: tourItemsReducer
 })
 
 export default allReducers;
