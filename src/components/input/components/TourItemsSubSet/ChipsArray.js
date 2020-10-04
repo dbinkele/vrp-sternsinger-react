@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Chip from '@material-ui/core/Chip';
 import List from "@material-ui/core/List";
@@ -22,22 +22,23 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const onSortEnd = ({oldIndex, newIndex}) => {
-    this.setState(({items}) => ({
-        items: arrayMove(items, oldIndex, newIndex),
-    }));
+const onSortEnd = (stuff) => {
+    console.log("-------_> dastuff " + stuff)
+    //
+    // this.setState(({items}) => ({
+    //     items: arrayMove(items, oldIndex, newIndex),
+    // }));
 };
 
 
 const ChipsArray = ({tourItems}) =>  {
     const classes = useStyles();
-
-    const SortableItem = SortableElement(({data}) =>
-        <ListItem key={data.key} button={true}>
+    const SortableItem = SortableElement(({item}) =>
+        <ListItem key={item.id} button={true}>
             <Chip
                 size="small"
                 icon={<HomeWorkTwoToneIcon />}
-                label={data.label}
+                label={item.label}
                 className={classes.chip}
             />
         </ListItem>);
@@ -45,8 +46,8 @@ const ChipsArray = ({tourItems}) =>  {
     const SortableList = SortableContainer(({items}) => {
         return (
             <List component="div" className="topContainer" width={"100%"}>
-                {items.map((value, index) => (
-                    <SortableItem key={`item-${value}`} index={index} value={value} />
+                {items.map((item, index) => (
+                    <SortableItem key={`item-${item.id}`} index={index} item={item} />
                 ))}
             </List>
         );

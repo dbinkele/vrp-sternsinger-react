@@ -13,11 +13,6 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Typography from "@material-ui/core/Typography";
 import AccordionDetails from "@material-ui/core/AccordionDetails";
 import {connect} from "react-redux";
-import {
-    addTourItemActionCreator,
-    removeTourItemActionCreator,
-    updateTourItemActionCreator
-} from "../../modules/tourItemsActions";
 
 
 const useStyles = makeStyles((theme) => ({

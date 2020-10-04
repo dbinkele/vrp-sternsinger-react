@@ -1,16 +1,8 @@
-import React, {memo, useContext} from "react";
-import {List, Paper, Grid, ListItemSecondaryAction, ListItem} from "@material-ui/core";
+import React, {memo} from "react";
+import {List} from "@material-ui/core";
 
 import TodoListItem from "./TodoListItem";
-import TourItemsSubset from "../../TourItemsSubSet/TourItemsSubset";
-import {TourItemsCtx} from "../../TourItems/TourItemsContext";
 import makeStyles from "@material-ui/core/styles/makeStyles";
-import {connect} from "react-redux";
-import {
-    addTourItemActionCreator,
-    removeTourItemActionCreator,
-    updateTourItemActionCreator
-} from "../../../../../modules/tourItemsActions";
 
 
 const useStyles = makeStyles((theme) => ({

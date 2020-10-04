@@ -2,23 +2,14 @@ import TransferList from "./TransferList";
 import React from 'react';
 import ChipsArray from "./ChipsArray";
 
-import {not} from '../../../../util/tools'
-import {connect} from "react-redux";
-import {
-    addTourItemActionCreator,
-    removeTourItemActionCreator,
-    updateTourItemActionCreator
-} from "../../../../modules/tourItemsActions";
+import {intersection, not} from '../../../../util/tools'
+
+
 
 
 const TourItemsSubset = ({tourItems, checked}) => {
     const [right, setRight] = React.useState([]);
     const [left, setLeft] = React.useState(tourItems);
-
-    // useEffect(() => {
-    //     handleAllLeft();
-    //     setLeft([...tourItems])
-    // }, [tourItems]);
 
     const handleAllRight = () => {
         let rightValue = right.concat(left);
@@ -36,7 +27,6 @@ const TourItemsSubset = ({tourItems, checked}) => {
         setLeft(left.concat(rightChecked));
         let rightValue = not(right, rightChecked);
         setRight(rightValue);
-
     };
 
     const handleAllLeft = () => {
@@ -44,10 +34,13 @@ const TourItemsSubset = ({tourItems, checked}) => {
         setRight([]);
     };
 
+    const newItems = not(tourItems, left.concat(right));
+    const newLeft = intersection(left, tourItems).concat(newItems);
+    const newRight = intersection(right, tourItems);
     return (
         !checked ?
             <ChipsArray tourItems={right}/> :
-            <TransferList left={left} right={right} handleAllLeft={handleAllLeft} handleAllRight={handleAllRight}
+            <TransferList left={newLeft} right={newRight} handleAllLeft={handleAllLeft} handleAllRight={handleAllRight}
                           handleCheckedLeft={handleCheckedLeft} handleCheckedRight={handleCheckedRight}/>
 
     )
