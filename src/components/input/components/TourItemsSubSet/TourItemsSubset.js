@@ -39,7 +39,7 @@ const TourItemsSubset = ({tourItems, checked}) => {
     const newRight = intersection(right, tourItems);
     return (
         !checked ?
-            <ChipsArray tourItems={right}/> :
+            <ChipsArray tourItems={newRight}/> :
             <TransferList left={newLeft} right={newRight} handleAllLeft={handleAllLeft} handleAllRight={handleAllRight}
                           handleCheckedLeft={handleCheckedLeft} handleCheckedRight={handleCheckedRight}/>
 
