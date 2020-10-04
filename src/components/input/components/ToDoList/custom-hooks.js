@@ -1,7 +1,7 @@
 import { useState } from "react";
 
-export const useTodos = (initialValue = []) => {
-  const [todos, setTodos] = useState(initialValue);
+export const useTodos = (props) => {
+  const [todos, setTodos] = useState();
 
   return {
     todos,

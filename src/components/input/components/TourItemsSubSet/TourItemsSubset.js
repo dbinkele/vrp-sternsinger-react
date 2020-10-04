@@ -11,8 +11,7 @@ import {
 } from "../../../../modules/tourItemsActions";
 
 
-const TourItemsSubset = (props) => {
-    const {tourItems, checked} = props;
+const TourItemsSubset = ({tourItems, checked}) => {
     const [right, setRight] = React.useState([]);
     const [left, setLeft] = React.useState(tourItems);
 
@@ -54,12 +53,5 @@ const TourItemsSubset = (props) => {
     )
 }
 
-export default connect(state => {
-        const {tourItems} = state.tourItemsReducer;
-        return {items: tourItems};
-    }
-    , {
-        addTourItem: addTourItemActionCreator,
-        removeTourItem: removeTourItemActionCreator,
-        updateTourItem: updateTourItemActionCreator
-    })(TourItemsSubset);
+
+export default TourItemsSubset;

@@ -26,9 +26,10 @@ const useStyles = makeStyles((theme) => ({
 
 const TodoList = memo(props => {
         const classes = useStyles();
+        const {todos, tourItems} = props;
         return (
             <>
-                {props.todos.length > 0 && (
+                {todos.length > 0 && (
                     <List className={classes.root} component="div">
                         {props.todos.map((todo, idx) => (
                             <TodoListItem
@@ -47,6 +48,4 @@ const TodoList = memo(props => {
     }
 );
 
-export default connect(state => {
-    return state;
-}, null)(TodoList);
+export default TodoList;

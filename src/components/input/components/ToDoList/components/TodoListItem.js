@@ -20,6 +20,7 @@ import {
 
 
 const TodoListItem = memo((props) => {
+    const {checked, tourItems} = props;
         return (<ListItem divider={props.divider} ContainerComponent="div">
                 <ListItemIcon>
                     <Checkbox
@@ -29,7 +30,7 @@ const TodoListItem = memo((props) => {
                     />
                 </ListItemIcon>
                 <ListItemText>
-                    <TourItemsSubset props/>
+                    <TourItemsSubset checked={checked} tourItems={tourItems}/>
                 </ListItemText>
                 <ListItemSecondaryAction component="div">
                     <IconButton aria-label="Delete Todo" onClick={props.onButtonClick}>
@@ -41,7 +42,4 @@ const TodoListItem = memo((props) => {
     }
 );
 
-export default connect(state => {
-        return state;
-    }
-    , null)(TodoListItem);
+export default TodoListItem;
