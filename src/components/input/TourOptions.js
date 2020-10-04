@@ -30,6 +30,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
+
 const TourOptionsForm = (props) => {
 
     const {register, control, handleSubmit, errors} = useForm();
@@ -46,73 +47,40 @@ const TourOptionsForm = (props) => {
         console.log(data);
     };
 
+
+    const accordion = (panel, component, heading, details) => {
+        const control = panel + "bh-content";
+        const header = panel + "bh-header";
+        return (
+            <Accordion expanded={expanded === panel} onChange={handleChange(panel)}>
+                <AccordionSummary
+                    expandIcon={<ExpandMoreIcon/>}
+                    aria-controls={control}
+                    id={header}
+                >
+                    <Typography className={classes.heading}>{heading}</Typography>
+                    <Typography className={classes.secondaryHeading}>
+                        {details}
+                    </Typography>
+                </AccordionSummary>
+                <AccordionDetails>
+                    {component}
+                    {/*<Container maxWidth="sm">*/}
+                    {/*    <Select options={tourItems}/>*/}
+                    {/*</Container>*/}
+                </AccordionDetails>
+            </Accordion>
+        )
+    }
+
     return (
         <Fragment>
             <form onSubmit={handleSubmit(onSubmit)} noValidate>
 
                 <div className={classes.root}>
-                    <Accordion expanded={expanded === 'panel1'} onChange={handleChange('panel1')}>
-                        <AccordionSummary
-                            expandIcon={<ExpandMoreIcon/>}
-                            aria-controls="panel1bh-content"
-                            id="panel1bh-header"
-                        >
-                            <Typography className={classes.heading}>General Settings</Typography>
-                            <Typography className={classes.secondaryHeading}>
-                                Basic Driver Values for the algorithm
-                            </Typography>
-                        </AccordionSummary>
-                        <AccordionDetails>
-                            {generalSettings()}
-                            {/*<Container maxWidth="sm">*/}
-                            {/*    <Select options={tourItems}/>*/}
-                            {/*</Container>*/}
-                        </AccordionDetails>
-                    </Accordion>
-                    <Accordion expanded={expanded === 'panel2'} onChange={handleChange('panel2')}>
-                        <AccordionSummary
-                            expandIcon={<ExpandMoreIcon/>}
-                            aria-controls="panel2bh-content"
-                            id="panel2bh-header"
-                        >
-                            <Typography className={classes.heading}>Tour Constraints</Typography>
-                            <Typography className={classes.secondaryHeading}>Tour Items who must be on the same
-                                tour</Typography>
-                        </AccordionSummary>
-                        <AccordionDetails>
-                            <TodoApp props/>
-                        </AccordionDetails>
-                    </Accordion>
-                    <Accordion expanded={expanded === 'panel3'} onChange={handleChange('panel3')}>
-                        <AccordionSummary
-                            expandIcon={<ExpandMoreIcon/>}
-                            aria-controls="panel3bh-content"
-                            id="panel3bh-header"
-                        >
-                            <Typography className={classes.heading}>Tour Constraints Ordered</Typography>
-                            <Typography className={classes.secondaryHeading}>Tour Items who must NOT be on the same
-                                tour</Typography>
-                        </AccordionSummary>
-                        <AccordionDetails>
-                            <TodoApp props/>
-                        </AccordionDetails>
-                    </Accordion>
-
-                    <Accordion expanded={expanded === 'panel4'} onChange={handleChange('panel4')}>
-                        <AccordionSummary
-                            expandIcon={<ExpandMoreIcon/>}
-                            aria-controls="panel4bh-content"
-                            id="panel4bh-header"
-                        >
-                            <Typography className={classes.heading}>Tour Constraints Ordered</Typography>
-                            <Typography className={classes.secondaryHeading}>Tour Items who must be on the same tour
-                                respecting given order</Typography>
-                        </AccordionSummary>
-                        <AccordionDetails>
-                            <TodoApp props/>
-                        </AccordionDetails>
-                    </Accordion>
-
+                    {accordion("panel1", generalSettings(), "General Settings", "Basic Driver Values for the algorithm")}
+                    {accordion("panel2", <TodoApp props/>, "Tour Constraints", "Tour Items  on the same tour")}
+                    {accordion("panel3", <TodoApp props/>, "Tour Constraints Ordered", "Tour Items on the same tour in given order")}
                 </div>
 
 
