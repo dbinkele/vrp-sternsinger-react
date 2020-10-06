@@ -5,9 +5,7 @@ import ChipsArray from "./ChipsArray";
 import {intersection, not} from '../../../../util/tools'
 
 
-
-
-const TourItemsSubset = ({tourItems, checked}) => {
+const TourItemsSubset = ({tourItems, checked, idx}) => {
     const [right, setRight] = React.useState([]);
     const [left, setLeft] = React.useState(tourItems);
 

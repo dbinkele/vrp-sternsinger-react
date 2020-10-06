@@ -33,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
 
 const TourOptionsForm = (props) => {
 
-    const {register, control, handleSubmit, errors} = useForm();
+    const {register, handleSubmit, errors} = useForm();
 
     const classes = useStyles();
     const [expanded, setExpanded] = React.useState(false);
@@ -79,8 +79,8 @@ const TourOptionsForm = (props) => {
 
                 <div className={classes.root}>
                     {accordion("panel1", generalSettings(), "General Settings", "Basic Driver Values for the algorithm")}
-                    {accordion("panel2", <TodoApp props/>, "Tour Constraints", "Tour Items  on the same tour")}
-                    {accordion("panel3", <TodoApp props/>, "Tour Constraints Ordered", "Tour Items on the same tour in given order")}
+                    {accordion("panel2", <TodoApp {...{...props, ...{todoIdx: 0}}}/>, "Tour Constraints", "Tour Items  on the same tour")}
+                    {accordion("panel3", <TodoApp {...{...props, ...{todoIdx: 1}}}/>, "Tour Constraints Ordered", "Tour Items on the same tour in given order")}
                 </div>
 
 

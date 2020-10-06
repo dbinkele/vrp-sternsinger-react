@@ -22,6 +22,9 @@ const TodoApp =
             todos: props.todos,
             tourItems: props.tourItems
         }
+
+        const {todoIdx} = props;
+
         return (
             <Grid
                 container
@@ -32,14 +35,14 @@ const TodoApp =
             >
                 <Grid item xs={12}>
                     <AddTodo onButtonClick={() => {
-                        props.addTodo();
+                        props.addTodo(todoIdx);
                     }}/>
                 </Grid>
                 <Grid item xs={12}>
                     <TodoList
                         {...{...props, ...customProps}}
-                        onItemCheck={idx => props.checkTodo(idx)}
-                        onItemRemove={idx => props.removeTodo(idx)}
+                        onItemCheck={idx => props.checkTodo(todoIdx, idx)}
+                        onItemRemove={idx => props.removeTodo(todoIdx, idx)}
                     >
                     </TodoList>
                 </Grid>
@@ -48,9 +51,12 @@ const TodoApp =
     })
 
 
-export default connect(state => {
+export default connect((state, props) => {
+    const {todoIdx} = props;
+    console.log("-------> Props " + todoIdx)
     return {
-        todos: state.todoReducer.todos,
+        todoIdx: todoIdx,
+        todos: state.todoReducer.todos[todoIdx],
         tourItems: state.tourItemsReducer.tourItems
     };
 },  {

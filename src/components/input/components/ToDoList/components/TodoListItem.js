@@ -13,7 +13,7 @@ import ListItemText from "@material-ui/core/ListItemText";
 
 const TodoListItem = memo((props) => {
 
-        const {checked, tourItems} = props;
+        const {checked, tourItems, idx} = props;
         return (<ListItem divider={props.divider} ContainerComponent="div">
                 <ListItemIcon>
                     <Checkbox
@@ -23,7 +23,7 @@ const TodoListItem = memo((props) => {
                     />
                 </ListItemIcon>
                 <ListItemText>
-                    <TourItemsSubset checked={checked} tourItems={tourItems}/>
+                    <TourItemsSubset checked={checked} tourItems={tourItems} idx={idx}/>
                 </ListItemText>
                 <ListItemSecondaryAction component="div">
                     <IconButton aria-label="Delete Todo" onClick={props.onButtonClick}>
