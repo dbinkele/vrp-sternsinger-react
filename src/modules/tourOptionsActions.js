@@ -9,9 +9,10 @@ export const addConstraintActionCreator = () => {
     }
 }
 
-export const removeConstraintActionCreator = () => {
+export const removeConstraintActionCreator = (index) => {
     return {
-        type: ADD_CONSTRAINT
+        type: REMOVE_CONSTRAINT,
+        payload: {index: index}
     }
 }
 
@@ -19,11 +20,11 @@ export const removeConstraintActionCreator = () => {
 export const tourOptionsReducer = handleActions({
         [ADD_CONSTRAINT]: (state, action) => {
             return {
-                todos: state.todos.concat([])
+                todos: state.constraints.concat([])
             }
         },
         [REMOVE_CONSTRAINT]: (state, action) => {
-            const index = action.payload;
+            const {index} = action.payload;
             return {
                 tourItems: [
                     ...state.constraints.slice(0, index),
@@ -34,10 +35,7 @@ export const tourOptionsReducer = handleActions({
 
     },
     {
-        tourOptions: {
-            constraints: [],
-            constraintsOrdered: []
-        }
+        constraints: [[], []]
     }
 )
 

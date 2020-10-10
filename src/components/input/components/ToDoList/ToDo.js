@@ -53,7 +53,6 @@ const TodoApp =
 
 export default connect((state, props) => {
     const {todoIdx} = props;
-    console.log("-------> Props " + todoIdx)
     return {
         todoIdx: todoIdx,
         todos: state.todoReducer.todos[todoIdx],
