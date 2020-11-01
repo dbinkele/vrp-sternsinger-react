@@ -4,6 +4,7 @@ import ChipsArray from "./ChipsArray";
 
 import {intersection, not} from '../../../../util/tools'
 import {connect} from "react-redux";
+import {arrayMove} from "react-sortable-hoc";
 
 
 const TourItemsSubset = (props) => {
@@ -47,12 +48,17 @@ const TourItemsSubset = (props) => {
     const newRight = intersection(constraints, tourItems);
     return (
         !selected ?
-            <ChipsArray tourItems={newRight}/> :
+            <ChipsArray tourItems={newRight} moveConstraints={makeMoveConstraints(constraints, props.setConsts)}/> :
             <TransferList left={newLeft} right={newRight} handleAllLeft={handleAllLeft} handleAllRight={handleAllRight}
                           handleCheckedLeft={handleCheckedLeft} handleCheckedRight={handleCheckedRight}/>
 
     )
 }
 
+const makeMoveConstraints = (constraints, setConstraints) => {
+    return ({oldIndex, newIndex}) => {
+        setConstraints(arrayMove([...constraints], oldIndex, newIndex));
+    }
+}
 
 export default connect(state => state, null)(TourItemsSubset);

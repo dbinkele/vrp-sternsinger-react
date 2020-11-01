@@ -5,7 +5,6 @@ import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import HomeWorkTwoToneIcon from '@material-ui/icons/HomeWorkTwoTone';
 import {SortableContainer, SortableElement} from 'react-sortable-hoc';
-import arrayMove from 'array-move';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -22,16 +21,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const onSortEnd = (stuff) => {
-    console.log("-------_> dastuff " + stuff)
-    //
-    // this.setState(({items}) => ({
-    //     items: arrayMove(items, oldIndex, newIndex),
-    // }));
-};
-
-
-const ChipsArray = ({tourItems}) =>  {
+const ChipsArray = ({tourItems, moveConstraints}) =>  {
     const classes = useStyles();
     const SortableItem = SortableElement(({item}) =>
         <ListItem key={item.id} button={true}>
@@ -55,7 +45,7 @@ const ChipsArray = ({tourItems}) =>  {
 
 
     return (
-        <SortableList items={tourItems} onSortEnd={onSortEnd} />
+        <SortableList items={tourItems} onSortEnd={moveConstraints} />
     );
 }
 
