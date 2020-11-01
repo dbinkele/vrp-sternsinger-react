@@ -10,10 +10,11 @@ import DeleteOutlined from "@material-ui/icons/DeleteOutlined";
 import TourItemsSubset from "../../TourItemsSubSet/TourItemsSubset";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
+import {connect} from "react-redux";
 
 const TodoListItem = memo((props) => {
 
-        const {checked, tourItems, idx} = props;
+        const {idx} = props;
         return (<ListItem divider={props.divider} ContainerComponent="div">
                 <ListItemIcon>
                     <Checkbox
@@ -23,7 +24,7 @@ const TodoListItem = memo((props) => {
                     />
                 </ListItemIcon>
                 <ListItemText>
-                    <TourItemsSubset checked={checked} tourItems={tourItems} idx={idx}/>
+                    <TourItemsSubset  {...{...props, ...{idx: idx}}}/>
                 </ListItemText>
                 <ListItemSecondaryAction component="div">
                     <IconButton aria-label="Delete Todo" onClick={props.onButtonClick}>
@@ -35,4 +36,4 @@ const TodoListItem = memo((props) => {
     }
 );
 
-export default TodoListItem;
+export default connect(state => state, null)(TodoListItem);

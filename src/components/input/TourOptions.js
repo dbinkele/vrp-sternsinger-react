@@ -44,7 +44,7 @@ const TourOptionsForm = (props) => {
 
     const onSubmit = (data, e) => {
         e.preventDefault();
-        console.log(data);
+        console.log('--------' + data);
     };
 
 

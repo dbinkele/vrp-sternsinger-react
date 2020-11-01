@@ -4,6 +4,9 @@ const ADD_TODO_ITEM = 'ADD_TODO_ITEM'
 const REMOVE_TODO_ITEM = 'REMOVE_TODO_ITEM'
 const UPDATE_TODO_ITEM = 'UPDATE_TODO_ITEM'
 
+const ADD_CONSTRAINT_ITEM = 'ADD_CONSTRAINT_ITEM'
+const SET_CONSTRAINT_ITEM = 'SEt_CONSTRAINT_ITEM'
+
 
 export const addTodoActionCreator = (toDoIdx) => {
     return {
@@ -13,6 +16,7 @@ export const addTodoActionCreator = (toDoIdx) => {
         }
     }
 }
+
 
 export const removeTodoActionCreator = (toDoIdx, index) => {
     return {
@@ -35,44 +39,89 @@ export const updateTodoActionCreator = (toDoIdx, index) => {
     }
 }
 
+export const addConstraintActionCreator = (toDoIdx, constraint, constrIdx) => {
+    return {
+        type: ADD_CONSTRAINT_ITEM,
+        payload: {
+            toDoIdx: toDoIdx,
+            constraint: constraint,
+            constrIdx: constrIdx
+        }
+    }
+}
+
+export const setConstraintActionCreator = (toDoIdx, constraints, constrIdx) => {
+    return {
+        type: SET_CONSTRAINT_ITEM,
+        payload: {
+            toDoIdx: toDoIdx,
+            constraints: constraints,
+            constrIdx: constrIdx
+        }
+    }
+}
+
+function newState(state, toDoIdx, changedTodo) {
+    let newVar = {
+        todos: [
+            ...state.todos.slice(0, toDoIdx),
+            changedTodo,
+            ...state.todos.slice(toDoIdx + 1)
+        ]
+    };
+    return newVar;
+}
+
 export const todoReducer = handleActions({
         [ADD_TODO_ITEM]: (state, action) => {
             const {toDoIdx} = action.payload;
             const changedTodo = state.todos[toDoIdx].concat({
-                checked: false
+                checked: false,
+                constraints: []
             });
-            return {
-                todos: [
-                    ...state.todos.slice(0, toDoIdx),
-                    changedTodo,
-                    ...state.todos.slice(toDoIdx + 1)
-                ]
-            }
+            return newState(state, toDoIdx, changedTodo)
         },
+
         [REMOVE_TODO_ITEM]:
             (state, action) => {
                 const {toDoIdx, index} = action.payload;
                 const changedTodo = state.todos[toDoIdx].filter((todo, currIndex) => index !== currIndex);
-                return {
-                    todos: [
-                        ...state.todos.slice(0, toDoIdx),
-                        changedTodo,
-                        ...state.todos.slice(toDoIdx + 1)
-                    ]
-                }
+                return newState(state, toDoIdx, changedTodo)
             },
         [UPDATE_TODO_ITEM]:
             (state, action) => {
                 const {toDoIdx, index} = action.payload;
                 const changedTodo = updateHlp(state, toDoIdx, index);
-                return {
-                    todos: [
-                        ...state.todos.slice(0, toDoIdx),
-                        changedTodo,
-                        ...state.todos.slice(toDoIdx + 1)
-                    ]
-                }
-            }
+                return newState(state, toDoIdx, changedTodo)
+            },
+        [ADD_CONSTRAINT_ITEM]: (state, action) => {
+            const {toDoIdx, constraint, constrIdx} = action.payload;
+            const oldToDo = state.todos[toDoIdx];
+            let changedTodo = [
+                ...oldToDo.slice(0, constrIdx),
+                {
+                    checked: oldToDo[constrIdx].checked,
+                    constraints: oldToDo[constrIdx].constraints.concat(constraint)
+                },
+                ...oldToDo.slice(constrIdx + 1)
+            ];
+            let newState1 = newState(state, toDoIdx, changedTodo);
+            return newState1
+        },
+        [SET_CONSTRAINT_ITEM]: (state, action) => {
+            const {toDoIdx, constraints, constrIdx} = action.payload;
+            const oldToDo = state.todos[toDoIdx];
+            let changedTodo = [
+                ...oldToDo.slice(0, constrIdx),
+                {
+                    checked: oldToDo[constrIdx].checked,
+                    constraints: constraints
+                },
+                ...oldToDo.slice(constrIdx + 1)
+            ];
+            let newState1 = newState(state, toDoIdx, changedTodo);
+            return newState1
+        }
     },
     {
         todos: [[], []]
@@ -82,10 +131,16 @@ export const todoReducer = handleActions({
 const updateHlp = (state, toDoIdx, index) => {
     return state.todos[toDoIdx].map((todo, currIndex) => {
         if (index !== currIndex && todo.checked) {
-            return {checked: false};
+            return {
+                checked: false,
+                constraints: todo.constraints
+            };
         }
         if (index === currIndex) {
-            return {checked: !todo.checked}
+            return {
+                checked: !todo.checked,
+                constraints: todo.constraints
+            }
         }
         return todo;
     })
