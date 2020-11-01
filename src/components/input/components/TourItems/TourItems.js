@@ -3,6 +3,7 @@ import MaterialTable from "material-table";
 import {cols, tableIcons} from '../../ConstTable'
 import {timeorderedUuid} from "../../../../util/tools";
 import {connect} from 'react-redux'
+import axios from 'axios';
 import {
     addTourItemActionCreator,
     removeTourItemActionCreator,
@@ -61,7 +62,7 @@ const TourItems = (props) => {
 
 const withCoordinates = (row, resolve, reject) => {
     let url = `https://nominatim.openstreetmap.org/search?format=json&country=de&postalcode=${row.code}&street=${row.number}+${row.street}`;
-    fetch(url)
+    axios.get(url, {timeout: 5000})
         .then(res => res.json())
         .then(data => {
             if (data.length > 0) {
@@ -74,6 +75,9 @@ const withCoordinates = (row, resolve, reject) => {
                 }
             }
             reject("Wrong Address!")
+        })
+        .catch(err => {
+            reject("Error " + err);
         })
 }
 
