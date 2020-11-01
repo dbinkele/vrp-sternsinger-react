@@ -14,7 +14,6 @@ import {connect} from "react-redux";
 
 const TodoListItem = memo((props) => {
 
-        const {idx} = props;
         return (<ListItem divider={props.divider} ContainerComponent="div">
                 <ListItemIcon>
                     <Checkbox
@@ -24,7 +23,7 @@ const TodoListItem = memo((props) => {
                     />
                 </ListItemIcon>
                 <ListItemText>
-                    <TourItemsSubset  {...{...props, ...{idx: idx}}}/>
+                    <TourItemsSubset  {...{...props}}/>
                 </ListItemText>
                 <ListItemSecondaryAction component="div">
                     <IconButton aria-label="Delete Todo" onClick={props.onButtonClick}>

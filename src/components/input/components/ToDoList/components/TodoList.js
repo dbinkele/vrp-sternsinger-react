@@ -30,9 +30,10 @@ const TodoList = memo(props => {
                                 {...{
                                     ...todo, ...props,
                                     ...{
-                                        idx: idx, todoIdx: todoIdx,
                                         addConst: makeAddConst(todoIdx, idx, props),
-                                        setConsts: makeSetConsts(todoIdx, idx, props)
+                                        setConsts: makeSetConsts(todoIdx, idx, props),
+                                        selected: makeSelected(todoIdx, idx, props),
+                                        constraints: makeConstr(todoIdx, idx, props)
                                     }
 
                                 }}
@@ -61,6 +62,16 @@ const makeSetConsts = (toDoIdx, idx, props) => {
         props.setConstraint(toDoIdx, constrs, idx);
     }
 }
+
+const makeSelected = (toDoIdx, idx, props) => {
+    return props.todoReducer.todos[toDoIdx][idx].checked;
+}
+
+const makeConstr = (toDoIdx, idx, props) => {
+    return props.todoReducer.todos[toDoIdx][idx].constraints;
+}
+
+
 
 export default connect(state => state, {
     addConstraint: addConstraintActionCreator,
