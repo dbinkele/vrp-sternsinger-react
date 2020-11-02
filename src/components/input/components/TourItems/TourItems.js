@@ -10,51 +10,62 @@ import {
     updateTourItemActionCreator
 } from '../../../../modules/tourItemsActions.js'
 
+import {useSnackbar} from 'notistack';
+
+
 const TourItems = (props) => {
+    const { enqueueSnackbar} = useSnackbar();
+
     const {items} = props;
 
     return (
-        <MaterialTable
-            options={{paging: false}}
-            icons={tableIcons}
-            title="Tour Items"
-            columns={cols}
-            data={items}
-            editable={{
-                onRowAdd: newData =>
-                    new Promise((resolve, reject) => {
-                        setTimeout(() => {
-                            withCoordinates(newData,
-                                () => {
-                                    newData.id = timeorderedUuid();
-                                    newData.label = newData.code + '/' + newData.street + '. ' + newData.number
-                                    newData.label += !!newData.name ? '/' + newData.name : ''
-                                    props.addTourItem(newData);
+            <MaterialTable
+                options={{paging: false}}
+                icons={tableIcons}
+                title="Tour Items"
+                columns={cols}
+                data={items}
+                editable={{
+                    onRowAdd: newData =>
+                        new Promise((resolve, reject) => {
+                            setTimeout(() => {
+                                withCoordinates(newData,
+                                    () => {
+                                        newData.id = timeorderedUuid();
+                                        newData.label = newData.code + '/' + newData.street + '. ' + newData.number
+                                        newData.label += !!newData.name ? '/' + newData.name : ''
+                                        props.addTourItem(newData);
+                                        resolve();
+                                    },
+                                    (arg) => {
+                                        enqueueSnackbar(arg, {variant: 'error'});
+                                        reject(arg)
+                                    });
+                            }, 10)
+                        }),
+                    onRowUpdate: (newData, oldData) =>
+                        new Promise((resolve, reject) => {
+                            setTimeout(() => {
+                                withCoordinates(newData, () => {
+                                    const index = oldData.tableData.id;
+                                    props.updateTourItem(newData, index);
                                     resolve();
-                                },
-                                reject);
-                        }, 10)
-                    }),
-                onRowUpdate: (newData, oldData) =>
-                    new Promise((resolve, reject) => {
-                        setTimeout(() => {
-                            withCoordinates(newData, () => {
+                                }, (arg) => {
+                                    enqueueSnackbar(arg, {variant: 'error'});
+                                    reject(arg)
+                                })
+                            }, 10)
+                        }),
+                    onRowDelete: oldData =>
+                        new Promise((resolve, reject) => {
+                            setTimeout(() => {
                                 const index = oldData.tableData.id;
-                                props.updateTourItem(newData, index);
+                                props.removeTourItem(index);
                                 resolve();
-                            }, reject)
-                        }, 10)
-                    }),
-                onRowDelete: oldData =>
-                    new Promise((resolve, reject) => {
-                        setTimeout(() => {
-                            const index = oldData.tableData.id;
-                            props.removeTourItem(index);
-                            resolve();
-                        }, 10)
-                    }),
-            }}
-        />
+                            }, 10)
+                        }),
+                }}
+            />
     )
 
 }
@@ -63,7 +74,7 @@ const TourItems = (props) => {
 const withCoordinates = (row, resolve, reject) => {
     let url = `https://nominatim.openstreetmap.org/search?format=json&country=de&postalcode=${row.code}&street=${row.number}+${row.street}`;
     axios.get(url, {timeout: 5000})
-        .then(res => res.json())
+        .then(res => res.data)
         .then(data => {
             if (data.length > 0) {
                 let firstHit = data[0];
@@ -77,7 +88,16 @@ const withCoordinates = (row, resolve, reject) => {
             reject("Wrong Address!")
         })
         .catch(err => {
-            reject("Error " + err);
+            if (err.response) {
+                // client received an error response (5xx, 4xx)
+                reject("Bad Response  " + err);
+            } else if (err.request) {
+                // client never received a response, or request never left
+                reject("No Response  " + err);
+            } else {
+                // anything else
+                reject("Unspecified Error  " + err);
+            }
         })
 }
 

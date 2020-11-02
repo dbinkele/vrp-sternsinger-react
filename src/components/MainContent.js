@@ -6,6 +6,7 @@ import TourOptions from "./input/TourOptions";
 import {RouteIdProvider} from "./RouteIdContext";
 import RoutesIdForm from "./RoutesIdForm";
 import TourResult from "./input/TourResult";
+import {SnackbarProvider} from "notistack";
 
 
 const useStyles = makeStyles(theme => ({
@@ -34,7 +35,9 @@ function MainContent() {
                 <Typography variant='h6'>Title</Typography>
             </div>
             <div className={classes.content}>
-                <TourItems/>
+                <SnackbarProvider maxSnack={3}>
+                    <TourItems/>
+                </SnackbarProvider>
                 <TourOptions/>
 
 

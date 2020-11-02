@@ -1,9 +1,7 @@
 import React, {Fragment} from "react";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
-import Snackbar from '@material-ui/core/Snackbar';
 import {useForm} from "react-hook-form";
-import Alert from '@material-ui/lab/Alert';
 import 'react-dual-listbox/lib/react-dual-listbox.css';
 import TodoApp from "./components/ToDoList/ToDo"
 import {makeStyles} from "@material-ui/core/styles";
@@ -13,6 +11,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Typography from "@material-ui/core/Typography";
 import AccordionDetails from "@material-ui/core/AccordionDetails";
 import {connect} from "react-redux";
+import {errorHighlightSimple} from "../../util/tools";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -112,7 +111,7 @@ const TourOptionsForm = (props) => {
                     })
                 }
             />
-            {errorHighlight(errors.email)}
+            {errorHighlightSimple(errors.email)}
 
             <TextField
                 id="timeout"
@@ -131,7 +130,7 @@ const TourOptionsForm = (props) => {
                             max: {value: 10, message: "Timeout can be at most 10."}
                         })}
             />
-            {errorHighlight(errors.timeout)}
+            {errorHighlightSimple(errors.timeout)}
 
             <TextField
                 id="vehicles"
@@ -147,20 +146,20 @@ const TourOptionsForm = (props) => {
                         {
                             required: "Please specify Number of Vehicles",
                             min: {value: 1, message: "At lest one vehicle is required."},
-                            max: {value: 20, message: "More than 20 vehicles not supported.."}
+                            max: {value: 20, message: "More than 20 vehicles not supported."}
                         })}
             />
-            {errorHighlight(errors.vehicles)}
+            {errorHighlightSimple(errors.vehicles)}
 
             <TextField
                 id="defaultDuration"
                 label="Default Duration Minutes"
                 type="number"
-                name="timeout"
+                name="defaultDuration"
                 margin="normal"
                 variant="outlined"
                 defaultValue={0}
-                error={!!errors.timeout}
+                error={!!errors.defaultDuration}
                 inputRef={
                     register(
                         {
@@ -168,7 +167,7 @@ const TourOptionsForm = (props) => {
                             min: {value: 0, message: "Must be greater zero."},
                         })}
             />
-            {errorHighlight(errors.defaultDuration)}
+            {errorHighlightSimple(errors.defaultDuration)}
 
             <TextField
                 id="weight_visits"
@@ -187,7 +186,7 @@ const TourOptionsForm = (props) => {
                             max: {value: 100, message: "More than 100 not supported."}
                         })}
             />
-            {errorHighlight(errors.weight_visits)}
+            {errorHighlightSimple(errors.weight_visits)}
 
             <TextField
                 id="weight_lenght"
@@ -206,31 +205,12 @@ const TourOptionsForm = (props) => {
                             max: {value: 100, message: "More than 100 not supported."}
                         })}
             />
-            {errorHighlight(errors.weight_length)}
+            {errorHighlightSimple(errors.weight_length)}
         </>;
     }
 };
 
 
-const errorHighlight = (err) => {
-    return (
-        <div>
-            {err &&
-            <Snackbar
-                open={true}
-                autoHideDuration={6000}
-                anchorOrigin={{
-                    vertical: 'top',
-                    horizontal: 'left',
-                }}
-            >
-                <Alert variant="filled" severity="error">
-                    {err.message}
-                </Alert>
-            </Snackbar>}
-        </div>
-    );
-}
 
 export default connect(state => {
     return state;

@@ -15,6 +15,7 @@
     "downshift": "^6.0.6",
     "lodash": "^4.17.19",
     "material-table": "^1.66.0",
+    "notistack": "0.8.6",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-dual-listbox": "^2.0.0",
