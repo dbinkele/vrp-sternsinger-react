@@ -16,6 +16,14 @@ import SaveAlt from '@material-ui/icons/SaveAlt';
 import Search from '@material-ui/icons/Search';
 import ViewColumn from '@material-ui/icons/ViewColumn';
 
+
+import {
+    MuiPickersUtilsProvider,
+    KeyboardTimePicker, TimePicker
+} from "@material-ui/pickers";
+import DateFnsUtils from "@date-io/date-fns";
+import moment from "moment";
+
 export const tableIcons = {
     Add: forwardRef((props, ref) => <AddBox {...props} ref={ref}/>),
     Check: forwardRef((props, ref) => <Check {...props} ref={ref}/>),
@@ -51,7 +59,7 @@ const isObligatory = (data) => {
 const validateNumber = (data) => {
     let obligatory = isObligatory(data);
     if (!obligatory.isValid) return obligatory;
-    if(data <= 0){
+    if (data <= 0) {
         return {isValid: false, helperText: 'must be greater zero'}
     }
     return {isValid: true}
@@ -97,6 +105,29 @@ export const cols = [
         title: 'Duration Minutes', field: 'duration', type: 'numeric',
     },
     {title: 'Hint', field: 'hint'},
+    {
+        title: "Time",
+        field: "time",
+        type: "datetime",
+        render: (data) => {
+            if (data.time === null|| !data.time){
+                return "";
+            }
+            return moment(data.time).format("hh:mm A");
+        },
+        editComponent: ({value, onChange}) => (
+            <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                <TimePicker
+                    clearable
+                    ampm={false}
+                    emptyLabel={''}
+                    label="24 hours"
+                    value={!value? null : value}
+                    onChange={onChange}
+                />
+            </MuiPickersUtilsProvider>
+        )
+    },
     {
         title: 'Latitude', field: 'lat', editable: 'never',
         render: rowData => round(rowData.lat, 4)
