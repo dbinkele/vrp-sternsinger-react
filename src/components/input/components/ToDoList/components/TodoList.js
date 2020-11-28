@@ -27,8 +27,7 @@ const TodoList = memo(props => {
                     <List className={classes.root} component="div">
                         {props.todos.map((todo, idx) => (
                             <TodoListItem
-                                {...{
-                                    ...todo, ...props,
+                                {...{...todo, ...props,
                                     ...{
                                         addConst: makeAddConst(todoIdx, idx, props),
                                         setConsts: makeSetConsts(todoIdx, idx, props),
