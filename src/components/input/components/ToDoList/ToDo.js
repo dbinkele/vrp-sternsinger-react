@@ -17,10 +17,14 @@ const useStyles = makeStyles((theme) => ({
 
 const TodoApp =
     memo((props) => {
+        const [globalConstraint, setGlobalConstraint] = React.useState([]);
+
         const classes = useStyles();
         const customProps = {
             todos: props.todos,
-            tourItems: props.tourItems
+            tourItems: props.tourItems,
+            globalConstraint: globalConstraint,
+            setGlobalConstraint: setGlobalConstraint
         }
 
         const {todoIdx} = props;
@@ -43,8 +47,7 @@ const TodoApp =
                         {...{...props, ...customProps}}
                         onItemCheck={idx => props.checkTodo(todoIdx, idx)}
                         onItemRemove={idx => props.removeTodo(todoIdx, idx)}
-                    >
-                    </TodoList>
+                    />
                 </Grid>
             </Grid>
         );

@@ -64,9 +64,6 @@ const TourOptionsForm = (props) => {
                 </AccordionSummary>
                 <AccordionDetails>
                     {component}
-                    {/*<Container maxWidth="sm">*/}
-                    {/*    <Select options={tourItems}/>*/}
-                    {/*</Container>*/}
                 </AccordionDetails>
             </Accordion>
         )

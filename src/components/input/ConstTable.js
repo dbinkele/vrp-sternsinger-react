@@ -18,8 +18,7 @@ import ViewColumn from '@material-ui/icons/ViewColumn';
 
 
 import {
-    MuiPickersUtilsProvider,
-    KeyboardTimePicker, TimePicker
+    MuiPickersUtilsProvider, TimePicker
 } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
 import moment from "moment";
