@@ -7,6 +7,7 @@ import Grid from "@material-ui/core/Grid";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import {connect} from "react-redux";
 import {addTodoActionCreator, removeTodoActionCreator, updateTodoActionCreator} from "../../../../modules/todoActions";
+import {useSnackbar} from "notistack";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -18,6 +19,9 @@ const useStyles = makeStyles((theme) => ({
 const TodoApp =
     memo((props) => {
         const [globalConstraint, setGlobalConstraint] = React.useState([]);
+        let [todosCount, setTodosCount] = React.useState(0);
+        const {enqueueSnackbar} = useSnackbar();
+
 
         const classes = useStyles();
         const customProps = {
@@ -39,14 +43,23 @@ const TodoApp =
             >
                 <Grid item xs={12}>
                     <AddTodo onButtonClick={() => {
+                        if (todosCount === 2) {
+                            enqueueSnackbar("Only 2 Tours available", {variant: 'error'});
+                            return;
+                        }
+                        setTodosCount(oldVal => oldVal + 1);
                         props.addTodo(todoIdx);
-                    }}/>
+                    }}
+                    />
                 </Grid>
                 <Grid item xs={12}>
                     <TodoList
                         {...{...props, ...customProps}}
                         onItemCheck={idx => props.checkTodo(todoIdx, idx)}
-                        onItemRemove={idx => props.removeTodo(todoIdx, idx)}
+                        onItemRemove={idx => {
+                            setTodosCount(oldVal => (oldVal - 1));
+                            props.removeTodo(todoIdx, idx)
+                        }}
                     />
                 </Grid>
             </Grid>
@@ -61,8 +74,8 @@ export default connect((state, props) => {
         todos: state.todoReducer.todos[todoIdx],
         tourItems: state.tourItemsReducer.tourItems
     };
-},  {
-    addTodo  : addTodoActionCreator,
+}, {
+    addTodo: addTodoActionCreator,
     removeTodo: removeTodoActionCreator,
     checkTodo: updateTodoActionCreator
 })(TodoApp);

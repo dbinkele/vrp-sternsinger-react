@@ -14,7 +14,7 @@ import {useSnackbar} from 'notistack';
 
 
 const TourItems = (props) => {
-    const { enqueueSnackbar} = useSnackbar();
+    const {enqueueSnackbar} = useSnackbar();
 
     const {items} = props;
 

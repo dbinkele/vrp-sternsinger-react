@@ -62,14 +62,13 @@ export const setConstraintActionCreator = (toDoIdx, constraints, constrIdx) => {
 }
 
 function newState(state, toDoIdx, changedTodo) {
-    let newVar = {
+    return {
         todos: [
             ...state.todos.slice(0, toDoIdx),
             changedTodo,
             ...state.todos.slice(toDoIdx + 1)
         ]
     };
-    return newVar;
 }
 
 export const todoReducer = handleActions({

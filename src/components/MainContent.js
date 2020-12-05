@@ -37,9 +37,8 @@ function MainContent() {
             <div className={classes.content}>
                 <SnackbarProvider maxSnack={3}>
                     <TourItems/>
+                    <TourOptions/>
                 </SnackbarProvider>
-                <TourOptions/>
-
 
                 <RouteIdProvider>
                     <RoutesIdForm/>

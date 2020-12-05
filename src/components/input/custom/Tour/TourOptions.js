@@ -155,7 +155,7 @@ const TourOptionsForm = (props) => {
                 name="defaultDuration"
                 margin="normal"
                 variant="outlined"
-                defaultValue={0}
+                defaultValue={1}
                 error={!!errors.defaultDuration}
                 inputRef={
                     register(
