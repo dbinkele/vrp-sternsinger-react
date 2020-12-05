@@ -1,11 +1,11 @@
 import React from 'react';
 import {makeStyles} from '@material-ui/core/styles';
 import {Typography} from '@material-ui/core';
-import TourItems from "./input/components/TourItems/TourItems";
-import TourOptions from "./input/TourOptions";
+import TourItems from "./input/custom/Tour/TourItems";
+import TourOptions from "./input/custom/Tour/TourOptions";
 import {RouteIdProvider} from "./RouteIdContext";
 import RoutesIdForm from "./RoutesIdForm";
-import TourResult from "./input/TourResult";
+import TourResult from "./input/custom/Tour/TourResult";
 import {SnackbarProvider} from "notistack";
 
 

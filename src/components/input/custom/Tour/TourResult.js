@@ -1,7 +1,7 @@
 import React, {useContext, useEffect, useState} from "react";
-import {url} from '../../util/tools'
+import {url} from '../../../../util/tools'
 import MaterialTable from "material-table";
-import {RouteIdContext} from "../RouteIdContext";
+import {RouteIdContext} from "../../../RouteIdContext";
 import {tableIcons, cols} from './ConstTable'
 
 const TourResult = () => {

@@ -1,6 +1,6 @@
 import React from "react";
 import MaterialTable from "material-table";
-import {cols, tableIcons} from '../../ConstTable'
+import {cols, tableIcons} from './ConstTable'
 import {timeorderedUuid} from "../../../../util/tools";
 import {connect} from 'react-redux'
 import axios from 'axios';

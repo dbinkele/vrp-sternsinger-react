@@ -3,7 +3,7 @@ import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import {useForm} from "react-hook-form";
 import 'react-dual-listbox/lib/react-dual-listbox.css';
-import TodoApp from "./components/ToDoList/ToDo"
+import TodoApp from "../ToDoList/ToDo"
 import {makeStyles} from "@material-ui/core/styles";
 import Accordion from "@material-ui/core/Accordion";
 import AccordionSummary from "@material-ui/core/AccordionSummary";
@@ -11,7 +11,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Typography from "@material-ui/core/Typography";
 import AccordionDetails from "@material-ui/core/AccordionDetails";
 import {connect} from "react-redux";
-import {errorHighlightSimple} from "../../util/tools";
+import {errorHighlightSimple} from "../../../../util/tools";
 
 
 const useStyles = makeStyles((theme) => ({
