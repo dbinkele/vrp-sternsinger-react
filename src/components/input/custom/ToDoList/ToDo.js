@@ -43,8 +43,10 @@ const TodoApp =
             >
                 <Grid item xs={12}>
                     <AddTodo onButtonClick={() => {
-                        if (todosCount === 2) {
-                            enqueueSnackbar("Only 2 Tours available", {variant: 'error'});
+                        let noVehicles = Number(props.maxToDo);
+                        if (todosCount >= noVehicles) {
+                            enqueueSnackbar(noVehicles + " vehicles can cover only " + noVehicles +
+                                " tours", {variant: 'error'});
                             return;
                         }
                         setTodosCount(oldVal => oldVal + 1);

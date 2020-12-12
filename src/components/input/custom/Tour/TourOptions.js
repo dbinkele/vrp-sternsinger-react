@@ -32,7 +32,8 @@ const useStyles = makeStyles((theme) => ({
 
 const TourOptionsForm = (props) => {
 
-    const {register, handleSubmit, errors} = useForm();
+    const {register, handleSubmit, errors, watch} = useForm();
+    const watchVehicles = watch("vehicles", 1);
 
     const classes = useStyles();
     const [expanded, setExpanded] = React.useState(false);
@@ -75,8 +76,9 @@ const TourOptionsForm = (props) => {
 
                 <div className={classes.root}>
                     {accordion("panel1", generalSettings(), "General Settings", "Basic Driver Values for the algorithm")}
-                    {accordion("panel2", <TodoApp {...{...props, ...{todoIdx: 0}}}/>, "Tour Constraints", "Tour Items  on the same tour in arbitrary order")}
-                    {accordion("panel3", <TodoApp {...{...props, ...{todoIdx: 1}}}/>, "Tour Constraints Ordered", "Tour Items on the same tour in given order")}
+                    {accordion("panel4", <TodoApp {...{...props, ...{todoIdx: 2, maxToDo: watchVehicles}}}/>, "Tour Assignment", "Tour Items must be an the nth tour")}
+                    {accordion("panel2", <TodoApp {...{...props, ...{todoIdx: 0, maxToDo: Number.MAX_VALUE}}}/>, "Tour Constraints", "Tour Items  on the same tour in arbitrary order")}
+                    {accordion("panel3", <TodoApp {...{...props, ...{todoIdx: 1, maxToDo: Number.MAX_VALUE}}}/>, "Tour Constraints Ordered", "Tour Items on the same tour in given order")}
                 </div>
 
 
