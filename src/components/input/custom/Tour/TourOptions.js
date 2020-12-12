@@ -11,7 +11,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Typography from "@material-ui/core/Typography";
 import AccordionDetails from "@material-ui/core/AccordionDetails";
 import {connect} from "react-redux";
-import {errorHighlightSimple} from "../../../../util/tools";
+import {useSnackbar} from "notistack";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -37,6 +37,12 @@ const TourOptionsForm = (props) => {
 
     const classes = useStyles();
     const [expanded, setExpanded] = React.useState(false);
+
+    const {enqueueSnackbar} = useSnackbar();
+
+    const error = (message) => {
+        enqueueSnackbar(message, {variant: 'error'});
+    }
 
     const handleChange = (panel) => (event, isExpanded) => {
         setExpanded(isExpanded ? panel : false);
@@ -76,9 +82,24 @@ const TourOptionsForm = (props) => {
 
                 <div className={classes.root}>
                     {accordion("panel1", generalSettings(), "General Settings", "Basic Driver Values for the algorithm")}
-                    {accordion("panel4", <TodoApp {...{...props, ...{todoIdx: 2, maxToDo: watchVehicles}}}/>, "Tour Assignment", "Tour Items must be an the nth tour")}
-                    {accordion("panel2", <TodoApp {...{...props, ...{todoIdx: 0, maxToDo: Number.MAX_VALUE}}}/>, "Tour Constraints", "Tour Items  on the same tour in arbitrary order")}
-                    {accordion("panel3", <TodoApp {...{...props, ...{todoIdx: 1, maxToDo: Number.MAX_VALUE}}}/>, "Tour Constraints Ordered", "Tour Items on the same tour in given order")}
+                    {accordion("panel4", <TodoApp {...{
+                        ...props, ...{
+                            todoIdx: 2,
+                            maxToDo: watchVehicles
+                        }
+                    }}/>, "Tour Assignment", "Tour Items must be an the nth tour")}
+                    {accordion("panel2", <TodoApp {...{
+                        ...props, ...{
+                            todoIdx: 0,
+                            maxToDo: Number.MAX_VALUE
+                        }
+                    }}/>, "Tour Constraints", "Tour Items  on the same tour in arbitrary order")}
+                    {accordion("panel3", <TodoApp {...{
+                        ...props, ...{
+                            todoIdx: 1,
+                            maxToDo: Number.MAX_VALUE
+                        }
+                    }}/>, "Tour Constraints Ordered", "Tour Items on the same tour in given order")}
                 </div>
 
 
@@ -110,7 +131,7 @@ const TourOptionsForm = (props) => {
                     })
                 }
             />
-            {errorHighlightSimple(errors.email)}
+            {errors.email && error(errors.email.message)}
 
             <TextField
                 id="timeout"
@@ -129,7 +150,7 @@ const TourOptionsForm = (props) => {
                             max: {value: 10, message: "Timeout can be at most 10."}
                         })}
             />
-            {errorHighlightSimple(errors.timeout)}
+            {errors.timeout && error(errors.timeout.message)}
 
             <TextField
                 id="vehicles"
@@ -148,7 +169,7 @@ const TourOptionsForm = (props) => {
                             max: {value: 20, message: "More than 20 vehicles not supported."}
                         })}
             />
-            {errorHighlightSimple(errors.vehicles)}
+            {errors.vehicles && error(errors.vehicles.message)}
 
             <TextField
                 id="defaultDuration"
@@ -166,7 +187,7 @@ const TourOptionsForm = (props) => {
                             min: {value: 0, message: "Must be greater zero."},
                         })}
             />
-            {errorHighlightSimple(errors.defaultDuration)}
+            {errors.defaultDuration && error(errors.defaultDuration.message)}
 
             <TextField
                 id="weight_visits"
@@ -185,7 +206,7 @@ const TourOptionsForm = (props) => {
                             max: {value: 100, message: "More than 100 not supported."}
                         })}
             />
-            {errorHighlightSimple(errors.weight_visits)}
+            {errors.weight_visits && error(errors.weight_visits.message)}
 
             <TextField
                 id="weight_lenght"
@@ -204,11 +225,10 @@ const TourOptionsForm = (props) => {
                             max: {value: 100, message: "More than 100 not supported."}
                         })}
             />
-            {errorHighlightSimple(errors.weight_length)}
+            {errors.weight_length && error(errors.weight_length.message)}
         </>;
     }
 };
-
 
 
 export default connect(state => {

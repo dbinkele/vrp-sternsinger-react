@@ -1,7 +1,5 @@
 import React, {useEffect, useRef} from "react";
 import {v1 as uuidv1} from 'uuid';
-import Snackbar from "@material-ui/core/Snackbar";
-import Alert from "@material-ui/lab/Alert";
 
 export const url = () => {
     if (process.env.NODE_ENV === 'development') {
@@ -81,27 +79,7 @@ export const usePrevious = (value) => {
     return ref.current;
 }
 
-export const errorHighlightSimple = (err) => {
-    return errorHighlight(err, true,  (event, reason) => {});
-}
 
-export const errorHighlight = (err, isOpen, handleClose) => {
-    return (
-        <div>
-            {err &&
-            <Snackbar
-                open={isOpen}
-                autoHideDuration={200}
-                onClose={handleClose}
-                anchorOrigin={{
-                    vertical: 'top',
-                    horizontal: 'left',
-                }}
-            >
-                <Alert variant="filled" severity="error" onClose={handleClose}>
-                    {err.message}
-                </Alert>
-            </Snackbar>}
-        </div>
-    );
-}
+
+
+
