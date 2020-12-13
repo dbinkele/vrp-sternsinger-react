@@ -22,6 +22,8 @@ const TodoList = memo(props => {
         const classes = useStyles();
         const {todos, todoIdx} = props;
         const dispatch = useDispatch();
+        const todoReducer = useSelector(state => state.todoReducer);
+
         return (
             <>
                 {todos.length > 0 && (
@@ -33,8 +35,8 @@ const TodoList = memo(props => {
                                     ...{
                                         addConst: constr => dispatch(addConstraintActionCreator(todoIdx, constr, idx)),
                                         setConsts: constr => dispatch(setConstraintActionCreator(todoIdx, constr, idx)),
-                                        selected: makeSelected(todoIdx, idx, props),
-                                        constraints: makeConstr(todoIdx, idx, props)
+                                        selected: todoReducer.todos[todoIdx][idx].checked,
+                                        constraints: todoReducer.todos[todoIdx][idx].constraints
                                     }
 
                                 }}
@@ -51,15 +53,5 @@ const TodoList = memo(props => {
         )
     }
 );
-
-
-const makeSelected = (toDoIdx, idx, props) => {
-    return props.todoReducer.todos[toDoIdx][idx].checked;
-}
-
-const makeConstr = (toDoIdx, idx, props) => {
-    return props.todoReducer.todos[toDoIdx][idx].constraints;
-}
-
 
 export default TodoList;
