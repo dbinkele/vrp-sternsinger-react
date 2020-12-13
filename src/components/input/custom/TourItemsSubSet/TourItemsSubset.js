@@ -63,4 +63,4 @@ const makeMoveConstraints = (constraints, setConstraints) => {
     }
 }
 
-export default connect(state => state, null)(TourItemsSubset);
+export default TourItemsSubset;
