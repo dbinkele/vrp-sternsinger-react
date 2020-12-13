@@ -35,4 +35,4 @@ const TodoListItem = memo((props) => {
     }
 );
 
-export default connect(state => state, null)(TodoListItem);
+export default TodoListItem;

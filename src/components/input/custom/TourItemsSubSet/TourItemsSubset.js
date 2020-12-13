@@ -3,7 +3,6 @@ import React from 'react';
 import ChipsArray from "./ChipsArray";
 
 import {intersection, not} from '../../../../util/tools'
-import {connect} from "react-redux";
 import {arrayMove} from "react-sortable-hoc";
 
 
