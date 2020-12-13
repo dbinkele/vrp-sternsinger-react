@@ -8,6 +8,8 @@ import makeStyles from "@material-ui/core/styles/makeStyles";
 import {connect} from "react-redux";
 import {addTodoActionCreator, removeTodoActionCreator, updateTodoActionCreator} from "../../../../modules/todoActions";
 import {useSnackbar} from "notistack";
+import {useSelector, useDispatch} from 'react-redux';
+
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -21,6 +23,8 @@ const TodoApp =
         const [globalConstraint, setGlobalConstraint] = React.useState([]);
         let [todosCount, setTodosCount] = React.useState(0);
         const {enqueueSnackbar} = useSnackbar();
+        const dispatch = useDispatch();
+
 
 
         const classes = useStyles();
@@ -50,17 +54,17 @@ const TodoApp =
                             return;
                         }
                         setTodosCount(oldVal => oldVal + 1);
-                        props.addTodo(todoIdx);
+                        dispatch(addTodoActionCreator(todoIdx));
                     }}
                     />
                 </Grid>
                 <Grid item xs={12}>
                     <TodoList
                         {...{...props, ...customProps}}
-                        onItemCheck={idx => props.checkTodo(todoIdx, idx)}
+                        onItemCheck={idx => dispatch(updateTodoActionCreator(todoIdx, idx))}
                         onItemRemove={idx => {
                             setTodosCount(oldVal => (oldVal - 1));
-                            props.removeTodo(todoIdx, idx)
+                            dispatch(removeTodoActionCreator(todoIdx, idx));
                         }}
                     />
                 </Grid>
@@ -76,8 +80,4 @@ export default connect((state, props) => {
         todos: state.todoReducer.todos[todoIdx],
         tourItems: state.tourItemsReducer.tourItems
     };
-}, {
-    addTodo: addTodoActionCreator,
-    removeTodo: removeTodoActionCreator,
-    checkTodo: updateTodoActionCreator
-})(TodoApp);
+}, null)(TodoApp);
