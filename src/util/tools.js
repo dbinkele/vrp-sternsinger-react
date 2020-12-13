@@ -1,4 +1,3 @@
-import React, {useEffect, useRef} from "react";
 import {v1 as uuidv1} from 'uuid';
 
 export const url = () => {
@@ -65,19 +64,7 @@ export const round = (num, dec) => {
     return (Math.round((num*Math.pow(10,dec))+(num_sign*0.0001))/Math.pow(10,dec)).toFixed(dec);
 }
 // Hook
-export const usePrevious = (value) => {
-    // The ref object is a generic container whose current property is mutable ...
-    // ... and can hold any value, similar to an instance property on a class
-    const ref = useRef();
 
-    // Store current value in ref
-    useEffect(() => {
-        ref.current = value;
-    }, [value]); // Only re-run if value changes
-
-    // Return previous value (happens before update in useEffect above)
-    return ref.current;
-}
 
 
 

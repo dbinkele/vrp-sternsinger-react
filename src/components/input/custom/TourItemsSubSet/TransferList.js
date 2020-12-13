@@ -9,6 +9,7 @@ import Checkbox from '@material-ui/core/Checkbox';
 import Button from '@material-ui/core/Button';
 import Paper from '@material-ui/core/Paper';
 import ListSubheader from "@material-ui/core/ListSubheader";
+import {intersection, not} from "../../../../util/tools";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -24,13 +25,6 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-function not(a, b) {
-    return a.filter((value) => b.indexOf(value) === -1);
-}
-
-function intersection(a, b) {
-    return a.filter((value) => b.indexOf(value) !== -1);
-}
 
 const TransferList = ({left, right, handleAllRight, handleCheckedRight, handleCheckedLeft, handleAllLeft}) => {
     const classes = useStyles();
