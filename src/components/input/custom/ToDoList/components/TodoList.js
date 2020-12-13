@@ -3,7 +3,7 @@ import {List} from "@material-ui/core";
 
 import TodoListItem from "./TodoListItem";
 import makeStyles from "@material-ui/core/styles/makeStyles";
-import {connect} from "react-redux";
+import {useSelector, useDispatch} from 'react-redux';
 import {addConstraintActionCreator, setConstraintActionCreator} from "../../../../../modules/todoActions";
 
 
@@ -21,16 +21,18 @@ const useStyles = makeStyles((theme) => ({
 const TodoList = memo(props => {
         const classes = useStyles();
         const {todos, todoIdx} = props;
+        const dispatch = useDispatch();
         return (
             <>
                 {todos.length > 0 && (
                     <List className={classes.root} component="div">
                         {props.todos.map((todo, idx) => (
                             <TodoListItem
-                                {...{...todo, ...props,
+                                {...{
+                                    ...todo, ...props,
                                     ...{
-                                        addConst: makeAddConst(todoIdx, idx, props),
-                                        setConsts: makeSetConsts(todoIdx, idx, props),
+                                        addConst: constr => dispatch(addConstraintActionCreator(todoIdx, constr, idx)),
+                                        setConsts: constr => dispatch(setConstraintActionCreator(todoIdx, constr, idx)),
                                         selected: makeSelected(todoIdx, idx, props),
                                         constraints: makeConstr(todoIdx, idx, props)
                                     }
@@ -50,17 +52,6 @@ const TodoList = memo(props => {
     }
 );
 
-const makeAddConst = (toDoIdx, idx, props) => {
-    return (constr) => {
-        props.addConstraint(toDoIdx, constr, idx);
-    }
-}
-
-const makeSetConsts = (toDoIdx, idx, props) => {
-    return (constrs) => {
-        props.setConstraint(toDoIdx, constrs, idx);
-    }
-}
 
 const makeSelected = (toDoIdx, idx, props) => {
     return props.todoReducer.todos[toDoIdx][idx].checked;
@@ -71,8 +62,4 @@ const makeConstr = (toDoIdx, idx, props) => {
 }
 
 
-
-export default connect(state => state, {
-    addConstraint: addConstraintActionCreator,
-    setConstraint: setConstraintActionCreator
-})(TodoList);
+export default TodoList;

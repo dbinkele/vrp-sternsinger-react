@@ -10,7 +10,6 @@ import DeleteOutlined from "@material-ui/icons/DeleteOutlined";
 import TourItemsSubset from "../../TourItemsSubSet/TourItemsSubset";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
-import {connect} from "react-redux";
 
 const TodoListItem = memo((props) => {
 
