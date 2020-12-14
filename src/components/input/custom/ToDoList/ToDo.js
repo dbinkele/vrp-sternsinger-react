@@ -5,7 +5,6 @@ import AddTodo from "./components/AddTodo";
 import TodoList from "./components/TodoList";
 import Grid from "@material-ui/core/Grid";
 import makeStyles from "@material-ui/core/styles/makeStyles";
-import {connect} from "react-redux";
 import {addTodoActionCreator, removeTodoActionCreator, updateTodoActionCreator} from "../../../../modules/todoActions";
 import {useSnackbar} from "notistack";
 import {useSelector, useDispatch} from 'react-redux';
@@ -20,22 +19,25 @@ const useStyles = makeStyles((theme) => ({
 
 const TodoApp =
     memo((props) => {
+        const {todoIdx} = props;
         const [globalConstraint, setGlobalConstraint] = React.useState([]);
         let [todosCount, setTodosCount] = React.useState(0);
         const {enqueueSnackbar} = useSnackbar();
         const dispatch = useDispatch();
-
-
+        const customState = useSelector(state => ({
+            todos: state.todoReducer.todos[todoIdx],
+            tourItems: state.tourItemsReducer.tourItems
+        }));
 
         const classes = useStyles();
         const customProps = {
-            todos: props.todos,
-            tourItems: props.tourItems,
+            todos: customState.todos,
+            tourItems: customState.tourItems,
             globalConstraint: globalConstraint,
             setGlobalConstraint: setGlobalConstraint
         }
 
-        const {todoIdx} = props;
+
 
         return (
             <Grid
@@ -73,11 +75,4 @@ const TodoApp =
     })
 
 
-export default connect((state, props) => {
-    const {todoIdx} = props;
-    return {
-        todoIdx: todoIdx,
-        todos: state.todoReducer.todos[todoIdx],
-        tourItems: state.tourItemsReducer.tourItems
-    };
-}, null)(TodoApp);
+export default TodoApp;
