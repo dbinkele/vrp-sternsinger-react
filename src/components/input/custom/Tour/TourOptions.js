@@ -10,7 +10,6 @@ import AccordionSummary from "@material-ui/core/AccordionSummary";
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Typography from "@material-ui/core/Typography";
 import AccordionDetails from "@material-ui/core/AccordionDetails";
-import {connect} from "react-redux";
 import {useSnackbar} from "notistack";
 
 
@@ -231,6 +230,4 @@ const TourOptionsForm = (props) => {
 };
 
 
-export default connect(state => {
-    return state;
-}, null)(TourOptionsForm);
+export default TourOptionsForm;

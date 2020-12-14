@@ -3,7 +3,7 @@ import {List} from "@material-ui/core";
 
 import TodoListItem from "./TodoListItem";
 import makeStyles from "@material-ui/core/styles/makeStyles";
-import {useSelector, useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {addConstraintActionCreator, setConstraintActionCreator} from "../../../../../modules/todoActions";
 
 
@@ -20,30 +20,28 @@ const useStyles = makeStyles((theme) => ({
 
 const TodoList = memo(props => {
         const classes = useStyles();
-        const {todos, todoIdx} = props;
+        const {todoIdx, globalConstraint, setGlobalConstraint, onItemRemove, onItemCheck} = props;
         const dispatch = useDispatch();
-        const todoReducer = useSelector(state => state.todoReducer);
+        const todo = useSelector(state => state.todoReducer.todos[todoIdx]);
 
         return (
             <>
-                {todos.length > 0 && (
+                {todo.length > 0 && (
                     <List className={classes.root} component="div">
-                        {props.todos.map((todo, idx) => (
+                        {todo.map((todoItem, idx) => (
                             <TodoListItem
                                 {...{
-                                    ...todo, ...props,
-                                    ...{
-                                        addConst: constr => dispatch(addConstraintActionCreator(todoIdx, constr, idx)),
-                                        setConsts: constr => dispatch(setConstraintActionCreator(todoIdx, constr, idx)),
-                                        selected: todoReducer.todos[todoIdx][idx].checked,
-                                        constraints: todoReducer.todos[todoIdx][idx].constraints
-                                    }
-
+                                    globalConstraint: globalConstraint,
+                                    setGlobalConstraint: setGlobalConstraint,
+                                    addConst: constr => dispatch(addConstraintActionCreator(todoIdx, constr, idx)),
+                                    setConsts: constr => dispatch(setConstraintActionCreator(todoIdx, constr, idx)),
+                                    selected: todo[idx].checked,
+                                    constraints: todo[idx].constraints
                                 }}
                                 key={`TodoItem.${idx}`}
-                                divider={idx !== props.todos.length - 1}
-                                onButtonClick={() => props.onItemRemove(idx)}
-                                onCheckBoxToggle={() => props.onItemCheck(idx)}
+                                divider={idx !== todo.length - 1}
+                                onButtonClick={() => onItemRemove(idx)}
+                                onCheckBoxToggle={() => onItemCheck(idx)}
                             />
                         ))}
                     </List>

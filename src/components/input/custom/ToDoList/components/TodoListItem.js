@@ -12,20 +12,20 @@ import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 
 const TodoListItem = memo((props) => {
-
-        return (<ListItem divider={props.divider} ContainerComponent="div">
+    const {selected, constraints, globalConstraint, setGlobalConstraint, addConst, setConsts, onButtonClick} = props;
+    return (<ListItem divider={props.divider} ContainerComponent="div">
                 <ListItemIcon>
                     <Checkbox
                         onClick={props.onCheckBoxToggle}
-                        checked={props.checked}
+                        checked={selected}
                         disableRipple
                     />
                 </ListItemIcon>
                 <ListItemText>
-                    <TourItemsSubset  {...{...props}}/>
+                    <TourItemsSubset  {...{...{selected, constraints, globalConstraint, setGlobalConstraint, addConst, setConsts}}}/>
                 </ListItemText>
                 <ListItemSecondaryAction component="div">
-                    <IconButton aria-label="Delete Todo" onClick={props.onButtonClick}>
+                    <IconButton aria-label="Delete Todo" onClick={onButtonClick}>
                         <DeleteOutlined/>
                     </IconButton>
                 </ListItemSecondaryAction>

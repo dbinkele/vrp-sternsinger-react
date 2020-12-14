@@ -7,7 +7,7 @@ import Grid from "@material-ui/core/Grid";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import {addTodoActionCreator, removeTodoActionCreator, updateTodoActionCreator} from "../../../../modules/todoActions";
 import {useSnackbar} from "notistack";
-import {useSelector, useDispatch} from 'react-redux';
+import {useDispatch} from 'react-redux';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -19,25 +19,18 @@ const useStyles = makeStyles((theme) => ({
 
 const TodoApp =
     memo((props) => {
-        const {todoIdx} = props;
+        const {todoIdx, maxToDo} = props;
         const [globalConstraint, setGlobalConstraint] = React.useState([]);
         let [todosCount, setTodosCount] = React.useState(0);
         const {enqueueSnackbar} = useSnackbar();
         const dispatch = useDispatch();
-        const customState = useSelector(state => ({
-            todos: state.todoReducer.todos[todoIdx],
-            tourItems: state.tourItemsReducer.tourItems
-        }));
 
         const classes = useStyles();
-        const customProps = {
-            todos: customState.todos,
-            tourItems: customState.tourItems,
+        const passOnProps = {
+            todoIdx: todoIdx,
             globalConstraint: globalConstraint,
             setGlobalConstraint: setGlobalConstraint
         }
-
-
 
         return (
             <Grid
@@ -49,7 +42,7 @@ const TodoApp =
             >
                 <Grid item xs={12}>
                     <AddTodo onButtonClick={() => {
-                        let noVehicles = Number(props.maxToDo);
+                        let noVehicles = Number(maxToDo);
                         if (todosCount >= noVehicles) {
                             enqueueSnackbar(noVehicles + " vehicles can cover only " + noVehicles +
                                 " tours", {variant: 'error'});
@@ -62,7 +55,7 @@ const TodoApp =
                 </Grid>
                 <Grid item xs={12}>
                     <TodoList
-                        {...{...props, ...customProps}}
+                        {...{...passOnProps}}
                         onItemCheck={idx => dispatch(updateTodoActionCreator(todoIdx, idx))}
                         onItemRemove={idx => {
                             setTodosCount(oldVal => (oldVal - 1));

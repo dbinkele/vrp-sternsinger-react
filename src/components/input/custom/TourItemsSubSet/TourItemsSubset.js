@@ -4,10 +4,14 @@ import ChipsArray from "./ChipsArray";
 
 import {intersection, not} from '../../../../util/tools'
 import {arrayMove} from "react-sortable-hoc";
+import {useSelector} from "react-redux";
 
 
 const TourItemsSubset = (props) => {
-    const {selected, tourItems, constraints, globalConstraint, setGlobalConstraint} = props;
+    const {selected, constraints, globalConstraint, setGlobalConstraint, setConsts, addConst} = props;
+
+    const tourItems = useSelector(state => (state.tourItemsReducer.tourItems));
+
     const [right, setRight] = React.useState([]);
 
     let availableTourItems = not(tourItems, globalConstraint);
@@ -16,7 +20,7 @@ const TourItemsSubset = (props) => {
     const handleAllRight = () => {
         let rightValue = right.concat(left);
         setRight(rightValue);
-        props.setConsts(rightValue);
+        setConsts(rightValue);
         setGlobalConstraint((old) => (old.concat(left)))
         setLeft([]);
     };
@@ -24,7 +28,7 @@ const TourItemsSubset = (props) => {
     const handleCheckedRight = (leftChecked) => {
         let rightValue = right.concat(leftChecked);
         setRight(rightValue);
-        props.addConst(leftChecked);
+        addConst(leftChecked);
         setGlobalConstraint((old) => (old.concat(leftChecked)))
         setLeft(not(left, leftChecked));
     };
@@ -34,14 +38,14 @@ const TourItemsSubset = (props) => {
         let rightValue = not(right, rightChecked);
         setRight(rightValue);
         setGlobalConstraint(old => (not(old, rightChecked)));
-        props.setConsts(rightValue);
+        setConsts(rightValue);
     };
 
     const handleAllLeft = () => {
         setLeft(left.concat(right));
         setRight([]);
         setGlobalConstraint(old => (not(old, right)));
-        props.setConsts([]);
+        setConsts([]);
     };
 
     const newItems = not(availableTourItems, left.concat(constraints));
@@ -49,7 +53,7 @@ const TourItemsSubset = (props) => {
     const newRight = intersection(constraints, tourItems);
     return (
         !selected ?
-            <ChipsArray tourItems={newRight} moveConstraints={makeMoveConstraints(constraints, props.setConsts)}/> :
+            <ChipsArray tourItems={newRight} moveConstraints={makeMoveConstraints(constraints, setConsts)}/> :
             <TransferList left={newLeft} right={newRight} handleAllLeft={handleAllLeft} handleAllRight={handleAllRight}
                           handleCheckedLeft={handleCheckedLeft} handleCheckedRight={handleCheckedRight}/>
 
