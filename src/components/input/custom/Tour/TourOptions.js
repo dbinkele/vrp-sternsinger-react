@@ -1,17 +1,12 @@
-import React, {Fragment, useEffect} from "react";
+import React, {Fragment} from "react";
 import Button from "@material-ui/core/Button";
-import TextField from "@material-ui/core/TextField";
 import {useForm} from "react-hook-form";
 import 'react-dual-listbox/lib/react-dual-listbox.css';
 import TodoApp from "../ToDoList/ToDo"
 import {makeStyles} from "@material-ui/core/styles";
-import Accordion from "@material-ui/core/Accordion";
-import AccordionSummary from "@material-ui/core/AccordionSummary";
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import Typography from "@material-ui/core/Typography";
-import AccordionDetails from "@material-ui/core/AccordionDetails";
 import {useSelector} from "react-redux";
 import Settings from "./Settings";
+import CustomAccordion from "./CustomAccordion";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -42,59 +37,38 @@ const TourOptionsForm = (props) => {
 
     const classes = useStyles();
     const [expanded, setExpanded] = React.useState(false);
-    const handleChange = (panel) => (event, isExpanded) => {
-        setExpanded(isExpanded ? panel : false);
-    };
-
-    const accordion = (panel, component, heading, details) => {
-        const control = panel + "bh-content";
-        const header = panel + "bh-header";
-        return (
-            <Accordion expanded={expanded === panel} onChange={handleChange(panel)}>
-                <AccordionSummary
-                    expandIcon={<ExpandMoreIcon/>}
-                    aria-controls={control}
-                    id={header}
-                >
-                    <Typography className={classes.heading}>{heading}</Typography>
-                    <Typography className={classes.secondaryHeading}>
-                        {details}
-                    </Typography>
-                </AccordionSummary>
-                <AccordionDetails>
-                    {component}
-                </AccordionDetails>
-            </Accordion>
-        )
-    }
-
 
     return (
         <Fragment>
 
-                <div className={classes.root}>
-                    {accordion("panel1", <Settings register={register} errors={errors}/>, "General Settings", "Basic Driver Values for the algorithm")}
+            <div className={classes.root}>
+                <CustomAccordion panel={"panel1"} component={<Settings register={register} errors={errors}/>}
+                                 heading={"General Settings"} details={"Basic Driver Values for the algorithm"}
+                                 expanded={expanded} setExpanded={setExpanded}/>
+                <CustomAccordion panel={"panel2"} component={<TodoApp {...{
+                    ...props, ...{
+                        todoIdx: 0,
+                        maxToDo: watchVehicles
+                    }
+                }}/>} heading={"Tour Assignment"} details={"Tour Items must be an the nth tour"} expanded={expanded}
+                                 setExpanded={setExpanded}/>
+                <CustomAccordion panel={"panel3"} component={<TodoApp {...{
+                    ...props, ...{
+                        todoIdx: 1,
+                        maxToDo: Number.MAX_VALUE
+                    }
+                }}/>} heading={"Tour Constraints"} details={"Tour Items  on the same tour in arbitrary order"} expanded={expanded}
+                                 setExpanded={setExpanded}/>
 
-                    {/*{accordion("panel1", generalSettings(), "General Settings", "Basic Driver Values for the algorithm")}*/}
-                    {accordion("panel4", <TodoApp {...{
-                        ...props, ...{
-                            todoIdx: 2,
-                            maxToDo: watchVehicles
-                        }
-                    }}/>, "Tour Assignment", "Tour Items must be an the nth tour")}
-                    {accordion("panel2", <TodoApp {...{
-                        ...props, ...{
-                            todoIdx: 0,
-                            maxToDo: Number.MAX_VALUE
-                        }
-                    }}/>, "Tour Constraints", "Tour Items  on the same tour in arbitrary order")}
-                    {accordion("panel3", <TodoApp {...{
-                        ...props, ...{
-                            todoIdx: 1,
-                            maxToDo: Number.MAX_VALUE
-                        }
-                    }}/>, "Tour Constraints Ordered", "Tour Items on the same tour in given order")}
-                </div>
+                <CustomAccordion panel={"panel4"} component={<TodoApp {...{
+                    ...props, ...{
+                        todoIdx: 2,
+                        maxToDo: Number.MAX_VALUE
+                    }
+                }}/>} heading={"Tour Constraints Ordered"} details={"Tour Items on the same tour in given order"} expanded={expanded}
+                                 setExpanded={setExpanded}/>
+
+            </div>
 
 
             <Button
