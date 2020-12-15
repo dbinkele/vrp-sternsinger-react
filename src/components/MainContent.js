@@ -40,10 +40,10 @@ function MainContent() {
                     <TourOptions/>
                 </SnackbarProvider>
 
-                <RouteIdProvider>
+                {/*<RouteIdProvider>
                     <RoutesIdForm/>
                     <TourResult/>
-                </RouteIdProvider>
+                </RouteIdProvider>*/}
             </div>
         </main>
     );
