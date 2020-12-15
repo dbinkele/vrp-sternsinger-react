@@ -1,4 +1,4 @@
-import React, {Fragment, useEffect} from "react";
+import React, {Fragment} from "react";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import {useForm} from "react-hook-form";
@@ -31,10 +31,7 @@ const useStyles = makeStyles((theme) => ({
 
 const TourOptionsForm = (props) => {
 
-    const {register, errors, watch, formState} = useForm({
-        mode: 'onChange'
-    });
-
+    const {register, handleSubmit, errors, watch} = useForm();
     const watchVehicles = watch("vehicles", 1);
 
     const classes = useStyles();
@@ -43,13 +40,18 @@ const TourOptionsForm = (props) => {
     const {enqueueSnackbar} = useSnackbar();
 
     const error = (message) => {
-        if (message === undefined) return;
         enqueueSnackbar(message, {variant: 'error'});
     }
 
     const handleChange = (panel) => (event, isExpanded) => {
         setExpanded(isExpanded ? panel : false);
     };
+
+    const onSubmit = (data, e) => {
+        e.preventDefault();
+        console.log('--------' + data);
+    };
+
 
     const accordion = (panel, component, heading, details) => {
         const control = panel + "bh-content";
@@ -73,18 +75,9 @@ const TourOptionsForm = (props) => {
         )
     }
 
-    useEffect(() => {
-       error(errors?.email?.message);
-        error(errors?.timeout?.message);
-        error(errors?.vehicles?.message);
-        error(errors?.defaultDuration?.message);
-        error(errors?.weight_visits?.message);
-        error(errors?.weight_length?.message);
-    }, [errors.email, errors.timeout,  errors.vehicles, errors.defaultDuration, errors.weight_visits, errors.weight_length, errors]);
-
     return (
         <Fragment>
-            <form>
+            <form onSubmit={handleSubmit(onSubmit)} noValidate>
 
                 <div className={classes.root}>
                     {accordion("panel1", generalSettings(), "General Settings", "Basic Driver Values for the algorithm")}
@@ -137,6 +130,7 @@ const TourOptionsForm = (props) => {
                     })
                 }
             />
+            {errors.email && error(errors.email.message)}
 
             <TextField
                 id="timeout"
@@ -155,6 +149,7 @@ const TourOptionsForm = (props) => {
                             max: {value: 10, message: "Timeout can be at most 10."}
                         })}
             />
+            {errors.timeout && error(errors.timeout.message)}
 
             <TextField
                 id="vehicles"
@@ -173,6 +168,7 @@ const TourOptionsForm = (props) => {
                             max: {value: 20, message: "More than 20 vehicles not supported."}
                         })}
             />
+            {errors.vehicles && error(errors.vehicles.message)}
 
             <TextField
                 id="defaultDuration"
@@ -190,6 +186,7 @@ const TourOptionsForm = (props) => {
                             min: {value: 0, message: "Must be greater zero."},
                         })}
             />
+            {errors.defaultDuration && error(errors.defaultDuration.message)}
 
             <TextField
                 id="weight_visits"
@@ -208,6 +205,7 @@ const TourOptionsForm = (props) => {
                             max: {value: 100, message: "More than 100 not supported."}
                         })}
             />
+            {errors.weight_visits && error(errors.weight_visits.message)}
 
             <TextField
                 id="weight_lenght"
@@ -226,6 +224,7 @@ const TourOptionsForm = (props) => {
                             max: {value: 100, message: "More than 100 not supported."}
                         })}
             />
+            {errors.weight_length && error(errors.weight_length.message)}
         </>;
     }
 };
