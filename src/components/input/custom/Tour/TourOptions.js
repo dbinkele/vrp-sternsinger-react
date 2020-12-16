@@ -12,16 +12,7 @@ import CustomAccordion from "./CustomAccordion";
 const useStyles = makeStyles((theme) => ({
     root: {
         width: '100%',
-    },
-    heading: {
-        fontSize: theme.typography.pxToRem(15),
-        flexBasis: '33.33%',
-        flexShrink: 0,
-    },
-    secondaryHeading: {
-        fontSize: theme.typography.pxToRem(15),
-        color: theme.palette.text.secondary,
-    },
+    }
 }));
 
 
@@ -29,7 +20,7 @@ const TourOptionsForm = (props) => {
 
     const theState = useSelector(state => state);
 
-    const {register, errors, watch, getValues, trigger} = useForm({
+    const {register, errors, watch, getValues, trigger, control} = useForm({
         mode: 'onChange'
     });
 
@@ -42,7 +33,7 @@ const TourOptionsForm = (props) => {
         <Fragment>
 
             <div className={classes.root}>
-                <CustomAccordion panel={"panel1"} component={<Settings register={register} errors={errors}/>}
+                <CustomAccordion panel={"panel1"} component={<Settings register={register} errors={errors} control={control}/>}
                                  heading={"General Settings"} details={"Basic Driver Values for the algorithm"}
                                  expanded={expanded} setExpanded={setExpanded}/>
                 <CustomAccordion panel={"panel2"} component={<TodoApp {...{

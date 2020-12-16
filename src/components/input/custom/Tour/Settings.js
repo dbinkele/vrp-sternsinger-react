@@ -1,9 +1,19 @@
 import TextField from "@material-ui/core/TextField";
 import React, {useEffect} from "react";
 import {useSnackbar} from "notistack";
+import Select from '@material-ui/core/Select';
+import {useSelector} from "react-redux";
+import FormControl from "@material-ui/core/FormControl";
+import InputLabel from "@material-ui/core/InputLabel";
+import {Controller} from "react-hook-form";
+import MenuItem from "@material-ui/core/MenuItem";
+import FormHelperText from "@material-ui/core/FormHelperText";
 
-const Settings = ({register, errors}) => {
+
+const Settings = ({register, errors, control}) => {
     const {enqueueSnackbar} = useSnackbar();
+    const tourItems = useSelector(state => (state.tourItemsReducer.tourItems));
+
 
     const error = (message) => {
         if (message === undefined) return;
@@ -17,9 +27,34 @@ const Settings = ({register, errors}) => {
         error(errors?.defaultDuration?.message);
         error(errors?.weight_visits?.message);
         error(errors?.weight_length?.message);
-    }, [errors.email, errors.timeout,  errors.vehicles, errors.defaultDuration, errors.weight_visits, errors.weight_length, errors]);
+        error(errors?.wordlevel?.message);
+    }, [errors.email, errors.timeout, errors.vehicles, errors.defaultDuration, errors.weight_visits, errors.weight_length, errors.wordlevel, errors]);
 
     return <>
+        <FormControl
+            style={{ minWidth: 300 }}
+            error={Boolean(errors.wordlevel)}
+        >
+            <InputLabel id="demo-simple-select-label">
+                Complexity of Words to Select
+            </InputLabel>
+
+            <Controller
+                as={
+                    <Select>
+                        {tourItems.map(item => (<MenuItem key={item.id} value={item.id}>{item.code}/{item.street}/{item.number}/{item.name}</MenuItem>))}
+                    </Select>
+                }
+                name="wordlevel"
+                rules={{ required: "this is required" }}
+                control={control}
+                defaultValue="medium"
+            />
+            <FormHelperText>
+                {errors.wordlevel && errors.wordlevel.message}
+            </FormHelperText>
+        </FormControl>
+
         <TextField
             id="email"
             label="Email address"
