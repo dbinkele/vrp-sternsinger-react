@@ -27,16 +27,16 @@ const Settings = ({register, errors, control}) => {
         error(errors?.defaultDuration?.message);
         error(errors?.weight_visits?.message);
         error(errors?.weight_length?.message);
-        error(errors?.wordlevel?.message);
-    }, [errors.email, errors.timeout, errors.vehicles, errors.defaultDuration, errors.weight_visits, errors.weight_length, errors.wordlevel, errors]);
+        error(errors?.depot?.message);
+    }, [errors.email, errors.timeout, errors.vehicles, errors.defaultDuration, errors.weight_visits, errors.weight_length, errors.depot, errors]);
 
     return <>
         <FormControl
             style={{ minWidth: 300 }}
-            error={Boolean(errors.wordlevel)}
+            error={Boolean(errors.depot)}
         >
             <InputLabel id="demo-simple-select-label">
-                Complexity of Words to Select
+                Select Start Location
             </InputLabel>
 
             <Controller
@@ -45,14 +45,10 @@ const Settings = ({register, errors, control}) => {
                         {tourItems.map(item => (<MenuItem key={item.id} value={item.id}>{item.code}/{item.street}/{item.number}/{item.name}</MenuItem>))}
                     </Select>
                 }
-                name="wordlevel"
-                rules={{ required: "this is required" }}
+                name="depot"
+                rules={{ required: "Start Location is required" }}
                 control={control}
-                defaultValue="medium"
             />
-            <FormHelperText>
-                {errors.wordlevel && errors.wordlevel.message}
-            </FormHelperText>
         </FormControl>
 
         <TextField
