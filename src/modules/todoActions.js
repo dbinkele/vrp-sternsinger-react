@@ -3,6 +3,7 @@ import {handleActions} from 'redux-actions'
 const ADD_TODO_ITEM = 'ADD_TODO_ITEM'
 const REMOVE_TODO_ITEM = 'REMOVE_TODO_ITEM'
 const UPDATE_TODO_ITEM = 'UPDATE_TODO_ITEM'
+const POP_TODO_ITEM = 'POP_TODO_ITEM'
 
 const ADD_CONSTRAINT_ITEM = 'ADD_CONSTRAINT_ITEM'
 const SET_CONSTRAINT_ITEM = 'SEt_CONSTRAINT_ITEM'
@@ -28,6 +29,14 @@ export const removeTodoActionCreator = (toDoIdx, index) => {
     }
 }
 
+export const popLastTodoAction = (toDoIdx) => {
+    return {
+        type: POP_TODO_ITEM,
+        payload: {
+            toDoIdx: toDoIdx
+        }
+    }
+}
 
 export const updateTodoActionCreator = (toDoIdx, index) => {
     return {
@@ -80,10 +89,16 @@ export const todoReducer = handleActions({
             });
             return newState(state, toDoIdx, changedTodo)
         },
-
         [REMOVE_TODO_ITEM]:
             (state, action) => {
                 const {toDoIdx, index} = action.payload;
+                const changedTodo = state.todos[toDoIdx].filter((todo, currIndex) => index !== currIndex);
+                return newState(state, toDoIdx, changedTodo)
+            },
+        [POP_TODO_ITEM]:
+            (state, action) => {
+                const {toDoIdx} = action.payload;
+                const index = state.todos[toDoIdx].length - 1;
                 const changedTodo = state.todos[toDoIdx].filter((todo, currIndex) => index !== currIndex);
                 return newState(state, toDoIdx, changedTodo)
             },

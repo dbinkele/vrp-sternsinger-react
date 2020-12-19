@@ -1,13 +1,13 @@
-import React, {memo} from "react";
+import React, {memo, useEffect} from "react";
 
 
 import AddTodo from "./components/AddTodo";
 import TodoList from "./components/TodoList";
 import Grid from "@material-ui/core/Grid";
 import makeStyles from "@material-ui/core/styles/makeStyles";
-import {addTodoActionCreator, removeTodoActionCreator, updateTodoActionCreator} from "../../../../modules/todoActions";
+import {addTodoActionCreator, removeTodoActionCreator, updateTodoActionCreator, popLastTodoAction} from "../../../../modules/todoActions";
 import {useSnackbar} from "notistack";
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -21,9 +21,10 @@ const TodoApp =
     memo((props) => {
         const {todoIdx, maxToDo} = props;
         const [globalConstraint, setGlobalConstraint] = React.useState([]);
-        let [todosCount, setTodosCount] = React.useState(0);
         const {enqueueSnackbar} = useSnackbar();
         const dispatch = useDispatch();
+        const todo = useSelector(state => state.todoReducer.todos[todoIdx]);
+
 
         const classes = useStyles();
         const passOnProps = {
@@ -31,6 +32,14 @@ const TodoApp =
             globalConstraint: globalConstraint,
             setGlobalConstraint: setGlobalConstraint
         }
+
+        useEffect(() => {
+            let noVehicles = Number(maxToDo);
+            let diff = todo.length -noVehicles;
+            for (let i = 0; i < diff; i++){
+                dispatch(popLastTodoAction(todoIdx))
+            }
+        }, [maxToDo, todo.length, todoIdx, dispatch]);
 
         return (
             <Grid
@@ -43,12 +52,11 @@ const TodoApp =
                 <Grid item xs={12}>
                     <AddTodo onButtonClick={() => {
                         let noVehicles = Number(maxToDo);
-                        if (todosCount >= noVehicles) {
+                        if (todo.length >= noVehicles) {
                             enqueueSnackbar(noVehicles + " vehicles can cover only " + noVehicles +
                                 " tours", {variant: 'error'});
                             return;
                         }
-                        setTodosCount(oldVal => oldVal + 1);
                         dispatch(addTodoActionCreator(todoIdx));
                     }}
                     />
@@ -58,7 +66,6 @@ const TodoApp =
                         {...{...passOnProps}}
                         onItemCheck={idx => dispatch(updateTodoActionCreator(todoIdx, idx))}
                         onItemRemove={idx => {
-                            setTodosCount(oldVal => (oldVal - 1));
                             dispatch(removeTodoActionCreator(todoIdx, idx));
                         }}
                     />

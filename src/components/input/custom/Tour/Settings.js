@@ -7,7 +7,6 @@ import FormControl from "@material-ui/core/FormControl";
 import InputLabel from "@material-ui/core/InputLabel";
 import {Controller} from "react-hook-form";
 import MenuItem from "@material-ui/core/MenuItem";
-import FormHelperText from "@material-ui/core/FormHelperText";
 
 
 const Settings = ({register, errors, control}) => {
@@ -33,7 +32,7 @@ const Settings = ({register, errors, control}) => {
     return <>
         <FormControl
             style={{ minWidth: 300 }}
-            error={Boolean(errors.depot)}
+            error={errors.depot}
         >
             <InputLabel id="demo-simple-select-label">
                 Select Start Location
