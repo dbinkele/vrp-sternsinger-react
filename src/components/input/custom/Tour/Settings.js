@@ -13,7 +13,6 @@ const Settings = ({register, errors, control}) => {
     const {enqueueSnackbar} = useSnackbar();
     const tourItems = useSelector(state => (state.tourItemsReducer.tourItems));
 
-
     const error = (message) => {
         if (message === undefined) return;
         enqueueSnackbar(message, {variant: 'error', preventDuplicate: true});
@@ -31,8 +30,8 @@ const Settings = ({register, errors, control}) => {
 
     return <>
         <FormControl
-            style={{ minWidth: 300 }}
-            error={errors.depot}
+            style={{minWidth: 300}}
+            error={Boolean(errors.depot)}
         >
             <InputLabel id="demo-simple-select-label">
                 Select Start Location
@@ -41,11 +40,12 @@ const Settings = ({register, errors, control}) => {
             <Controller
                 as={
                     <Select>
-                        {tourItems.map(item => (<MenuItem key={item.id} value={item.id}>{item.code}/{item.street}/{item.number}/{item.name}</MenuItem>))}
+                        {tourItems.map(item => (<MenuItem key={item.id}
+                                                          value={item.id}>{item.code}/{item.street}/{item.number}/{item.name}</MenuItem>))}
                     </Select>
                 }
                 name="depot"
-                rules={{ required: "Start Location is required" }}
+                rules={{required: "Start Location is required"}}
                 control={control}
             />
         </FormControl>

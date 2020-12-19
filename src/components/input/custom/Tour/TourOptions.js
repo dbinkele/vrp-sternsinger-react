@@ -21,7 +21,16 @@ const TourOptionsForm = (props) => {
     const theState = useSelector(state => state);
 
     const {register, errors, watch, getValues, trigger, control} = useForm({
-        mode: 'onChange'
+        mode: 'onChange',
+        defaultValues: {
+            depot: "",
+            email: "",
+            timeout: 3,
+            vehicles: 1,
+            defaultDuration: 1,
+            weight_visits: 1,
+            weight_lenght: 1
+        }
     });
 
     const watchVehicles = watch("vehicles", 1);
@@ -67,7 +76,7 @@ const TourOptionsForm = (props) => {
                 variant="outlined"
                 onClick={async () => {
                     const generalSettingsValid = await trigger();
-                    console.log("HAndler " + getValues());
+                    console.log("HAndler " + getValues().depot);
                     console.log(theState);
                     var i = 9;
                 }}
