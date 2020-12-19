@@ -76,8 +76,24 @@ const TourOptionsForm = (props) => {
                 variant="outlined"
                 onClick={async () => {
                     const generalSettingsValid = await trigger();
-                    console.log("HAndler " + getValues().depot);
+                    let settingsValues = getValues();
+                    console.log("HAndler " + settingsValues.depot);
                     console.log(theState);
+                    const data = {
+                        recipent: settingsValues.email,
+                        data: theState.tourItemsReducer.tourItems,
+                        constraints: {
+                            num_visits_to_max_tour_len_ration: [
+                                Number(settingsValues.weight_visits),
+                                Number(settingsValues.weight_length)
+                            ],
+                            timeout: Number(settingsValues.timeout),
+                            depot: theState.tourItemsReducer.tourItems.map(x => x.id).indexOf(settingsValues.depot),
+                            num_vehicles: Number(settingsValues.vehicles)
+                        }
+                    };
+
+                    console.log(data);
                     var i = 9;
                 }}
             >
