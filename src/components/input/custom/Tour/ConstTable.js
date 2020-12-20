@@ -21,7 +21,8 @@ import {
     MuiPickersUtilsProvider, TimePicker
 } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
-import moment from "moment";
+
+const moment = require('moment')
 
 export const tableIcons = {
     Add: forwardRef((props, ref) => <AddBox {...props} ref={ref}/>),
@@ -79,7 +80,7 @@ const validatePostalCode = (code) => {
 
 
 const round = (data, dec) => {
-    return !!data ? parseFloat(data).toFixed(5) : "";
+    return !!data ? parseFloat(data).toFixed(dec) : "";
 }
 
 export const cols = [
@@ -105,23 +106,36 @@ export const cols = [
     },
     {title: 'Hint', field: 'hint'},
     {
-        title: "Time",
-        field: "time",
+        title: "Start Time Window",
+        field: "timewindowstart",
         type: "datetime",
-        render: (data) => {
-            if (data.time === null|| !data.time){
-                return "";
-            }
-            return moment(data.time).format("hh:mm A");
-        },
+        validate: rowData => validateStartTimeWindow(rowData),
+        render: (data) => renderTime(data),
         editComponent: ({value, onChange}) => (
             <MuiPickersUtilsProvider utils={DateFnsUtils}>
                 <TimePicker
                     clearable
                     ampm={false}
                     emptyLabel={''}
-                    label="24 hours"
-                    value={!value? null : value}
+                    value={!value ? null : value}
+                    onChange={onChange}
+                />
+            </MuiPickersUtilsProvider>
+        )
+    },
+    {
+        title: "End Time Window",
+        field: "timewindowend",
+        type: "datetime",
+        validate: rowData => validateEndTimeWindow(rowData),
+        render: (data) => renderTime(data),
+        editComponent: ({value, onChange}) => (
+            <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                <TimePicker
+                    clearable
+                    ampm={false}
+                    emptyLabel={''}
+                    value={!value ? null : value}
                     onChange={onChange}
                 />
             </MuiPickersUtilsProvider>
@@ -136,3 +150,36 @@ export const cols = [
         render: rowData => round(rowData.lon, 4)
     }
 ]
+
+
+const renderTime = data => {
+    if (data.time === null || !data.time) {
+        return "";
+    }
+    return moment(data.time).format("hh:mm A");
+}
+
+
+const validateStartTimeWindow = rowData => {
+    if (!("timewindowstart" in rowData) && "timewindowend" in rowData) {
+        return {isValid: false, helperText: 'End of time window given, but not start'}
+    }
+    if ("timewindowstart" in rowData && "timewindowend" in rowData) {
+        if (moment(rowData.timewindowstart).isAfter(moment(rowData.timewindowend))) {
+            return {isValid: false, helperText: 'Start of time window before end'}
+        }
+    }
+    return {isValid: true}
+}
+
+const validateEndTimeWindow = rowData => {
+    if (!("timewindowend" in rowData) && "timewindowstart" in rowData) {
+        return {isValid: false, helperText: 'Start of time window given, but not end'}
+    }
+    if ("timewindowstart" in rowData && "timewindowend" in rowData) {
+        if (moment(rowData.timewindowstart).isAfter(moment(rowData.timewindowend))) {
+            return {isValid: false, helperText: 'Start of time window before end'}
+        }
+    }
+    return {isValid: true}
+}
