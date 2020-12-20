@@ -38,6 +38,11 @@ const TourOptionsForm = (props) => {
     const classes = useStyles();
     const [expanded, setExpanded] = React.useState(false);
 
+    function constraintsToTourItemsIndex(tourItemsIds, index) {
+        let constr0 = theState.todoReducer.todos[index].map(x => x.constraints);
+        return constr0.map(x => x.map(y => y.id).map(z => tourItemsIds.indexOf(z)));
+    }
+
     return (
         <Fragment>
 
@@ -68,6 +73,14 @@ const TourOptionsForm = (props) => {
                 }}/>} heading={"Tour Constraints Ordered"} details={"Tour Items on the same tour in given order"} expanded={expanded}
                                  setExpanded={setExpanded}/>
 
+                <CustomAccordion panel={"panel5"} component={<TodoApp {...{
+                    ...props, ...{
+                        todoIdx: 3,
+                        maxToDo: Number.MAX_VALUE
+                    }
+                }}/>} heading={"Tour Constraints Different"} details={"Tour Items that must be on different routes"} expanded={expanded}
+                                 setExpanded={setExpanded}/>
+
             </div>
 
 
@@ -76,9 +89,12 @@ const TourOptionsForm = (props) => {
                 variant="outlined"
                 onClick={async () => {
                     const generalSettingsValid = await trigger();
+                    if (!generalSettingsValid) return;
+
                     let settingsValues = getValues();
                     console.log("HAndler " + settingsValues.depot);
-                    console.log(theState);
+                    console.log(theState.todoReducer[0]);
+                    let tourItemsIds = theState.tourItemsReducer.tourItems.map(x => x.id);
                     const data = {
                         recipent: settingsValues.email,
                         data: theState.tourItemsReducer.tourItems,
@@ -88,8 +104,13 @@ const TourOptionsForm = (props) => {
                                 Number(settingsValues.weight_length)
                             ],
                             timeout: Number(settingsValues.timeout),
-                            depot: theState.tourItemsReducer.tourItems.map(x => x.id).indexOf(settingsValues.depot),
-                            num_vehicles: Number(settingsValues.vehicles)
+                            depot: tourItemsIds.indexOf(settingsValues.depot),
+                            num_vehicles: Number(settingsValues.vehicles),
+                            fixed_arcs: [],
+                            assign_to_route: constraintsToTourItemsIndex(tourItemsIds, 0),
+                            same_roue: constraintsToTourItemsIndex(tourItemsIds, 1),
+                            same_route_ordered: constraintsToTourItemsIndex(tourItemsIds, 2),
+                            different_route: constraintsToTourItemsIndex(tourItemsIds, 3)
                         }
                     };
 

@@ -119,8 +119,7 @@ export const todoReducer = handleActions({
                 },
                 ...oldToDo.slice(constrIdx + 1)
             ];
-            let newState1 = newState(state, toDoIdx, changedTodo);
-            return newState1
+            return newState(state, toDoIdx, changedTodo)
         },
         [SET_CONSTRAINT_ITEM]: (state, action) => {
             const {toDoIdx, constraints, constrIdx} = action.payload;
@@ -133,12 +132,11 @@ export const todoReducer = handleActions({
                 },
                 ...oldToDo.slice(constrIdx + 1)
             ];
-            let newState1 = newState(state, toDoIdx, changedTodo);
-            return newState1
+            return newState(state, toDoIdx, changedTodo)
         }
     },
     {
-        todos: [[], [], []]
+        todos: [[], [], [], []]
     }
 )
 

@@ -7,6 +7,8 @@ import FormControl from "@material-ui/core/FormControl";
 import InputLabel from "@material-ui/core/InputLabel";
 import {Controller} from "react-hook-form";
 import MenuItem from "@material-ui/core/MenuItem";
+import {MuiPickersUtilsProvider, TimePicker} from "@material-ui/pickers";
+import DateFnsUtils from "@date-io/date-fns";
 
 
 const Settings = ({register, errors, control}) => {
@@ -26,7 +28,9 @@ const Settings = ({register, errors, control}) => {
         error(errors?.weight_visits?.message);
         error(errors?.weight_length?.message);
         error(errors?.depot?.message);
-    }, [errors.email, errors.timeout, errors.vehicles, errors.defaultDuration, errors.weight_visits, errors.weight_length, errors.depot, errors]);
+        error(errors?.starttime?.message);
+    }, [errors.email, errors.timeout, errors.vehicles, errors.defaultDuration, errors.weight_visits,
+        errors.weight_length, errors.depot, errors.starttime, errors]);
 
     return <>
         <FormControl
@@ -158,7 +162,25 @@ const Settings = ({register, errors, control}) => {
                         max: {value: 100, message: "More than 100 not supported."}
                     })}
         />
-    </>;
+
+        <Controller
+            name="starttime"
+            control={control}
+            render={({ onChange, value }) => (
+                <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                    <TimePicker
+                        clearable
+                        ampm={false}
+                        label="Select Start Time"
+                        value={!value? null : value}
+                        onChange={onChange}
+                        error={Boolean(errors.starttime)}
+                    />
+                </MuiPickersUtilsProvider>
+            )}
+            rules={{required: "Start Time is required"}}
+        />
+        </>;
 }
 
 export default Settings;
