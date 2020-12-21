@@ -120,32 +120,36 @@ export const cols = [
     {
         title: 'Duration Minutes', field: 'duration', type: 'numeric',
     },
-    {title: 'Hint', field: 'hint'},
-    {
-        title: "Start Time Window",
-        field: "timewindowstart",
-        type: "datetime",
-        validate: rowData => validateStartTimeWindow(rowData),
-        render: (data) => renderTime(data),
-        editComponent: Timepicker2
-    },
-    {
-        title: "End Time Window",
-        field: "timewindowend",
-        type: "datetime",
-        validate: rowData => validateEndTimeWindow(rowData),
-        render: (data) => renderTime(data),
-        editComponent: Timepicker2
-    },
-    {
-        title: 'Latitude', field: 'lat', editable: 'never',
-        render: rowData => round(rowData.lat, 4)
-    },
-    {
-        title: 'Longitude', field: 'lon', editable: 'never',
-        render: rowData => round(rowData.lon, 4)
-    }
+    {title: 'Hint', field: 'hint'}
 ]
+
+export const tourItemsCols = (startTime) => {
+    return cols.concat([
+        {
+            title: "Start Time Window",
+            field: "timewindowstart",
+            type: "datetime",
+            validate: rowData => validateStartTimeWindow(rowData, startTime),
+            render: (data) => renderTime(data),
+            editComponent: Timepicker2
+        },
+        {
+            title: "End Time Window",
+            field: "timewindowend",
+            type: "datetime",
+            validate: rowData => validateEndTimeWindow(rowData, startTime),
+            render: (data) => renderTime(data),
+            editComponent: Timepicker2
+        },
+        {
+            title: 'Latitude', field: 'lat', editable: 'never',
+            render: rowData => round(rowData.lat, 4)
+        },
+        {
+            title: 'Longitude', field: 'lon', editable: 'never',
+            render: rowData => round(rowData.lon, 4)
+        }])
+}
 
 const renderTime = data => {
     if (data.time === null || !data.time) {
@@ -163,7 +167,12 @@ function timewindowEndAbsent(rowData) {
     return !("timewindowend" in rowData) || rowData.timewindowend == null;
 }
 
-const validateStartTimeWindow = rowData => {
+const validateStartTimeWindow = (rowData, startTime) => {
+    if(!timewindowstartAbsent(rowData) && startTime != null){
+        if(moment(rowData.timewindowstart).isBefore(moment(startTime))){
+            return {isValid: false, helperText: 'End of time window not after global start time ' + moment(startTime).format("hh:mm A")}
+        }
+    }
     if (timewindowstartAbsent(rowData) && !timewindowEndAbsent(rowData)) {
         return {isValid: false, helperText: 'End of time window given, but not start'}
     }
@@ -177,7 +186,12 @@ const validateStartTimeWindow = rowData => {
 
 
 
-const validateEndTimeWindow = rowData => {
+const validateEndTimeWindow = (rowData, startTime) => {
+    if(!timewindowEndAbsent(rowData) && startTime != null){
+        if(moment(rowData.timewindowend).isBefore(moment(startTime))){
+            return {isValid: false, helperText: 'End of time window not after global start time ' + moment(startTime).format("hh:mm A")}
+        }
+    }
     if (timewindowEndAbsent(rowData) && !timewindowstartAbsent(rowData)) {
         return {isValid: false, helperText: 'Start of time window given, but not end'}
     }

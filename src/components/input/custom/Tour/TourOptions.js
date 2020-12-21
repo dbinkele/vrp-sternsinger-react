@@ -1,4 +1,4 @@
-import React, {Fragment} from "react";
+import React, {Fragment, useEffect} from "react";
 import Button from "@material-ui/core/Button";
 import {useForm} from "react-hook-form";
 import 'react-dual-listbox/lib/react-dual-listbox.css';
@@ -17,7 +17,7 @@ const useStyles = makeStyles((theme) => ({
 
 
 const TourOptionsForm = (props) => {
-
+    const {setStartTime} = props;
     const theState = useSelector(state => state);
 
     const {register, errors, watch, getValues, trigger, control} = useForm({
@@ -34,9 +34,14 @@ const TourOptionsForm = (props) => {
     });
 
     const watchVehicles = watch("vehicles", 1);
+    const watchStartTime = watch("starttime");
 
     const classes = useStyles();
     const [expanded, setExpanded] = React.useState(false);
+
+    useEffect(() => {
+        setStartTime(old => watchStartTime);
+    }, [watchStartTime]);
 
     function constraintsToTourItemsIndex(tourItemsIds, index) {
         let constr0 = theState.todoReducer.todos[index].map(x => x.constraints);

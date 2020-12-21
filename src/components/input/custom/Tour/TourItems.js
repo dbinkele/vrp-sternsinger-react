@@ -1,6 +1,6 @@
 import React from "react";
 import MaterialTable from "material-table";
-import {cols, tableIcons} from './ConstTable'
+import {cols, tableIcons, tourItemsCols} from './ConstTable'
 import {timeorderedUuid} from "../../../../util/tools";
 import {connect} from 'react-redux'
 import axios from 'axios';
@@ -16,14 +16,14 @@ import {useSnackbar} from 'notistack';
 const TourItems = (props) => {
     const {enqueueSnackbar} = useSnackbar();
 
-    const {items} = props;
+    const {items, startTime} = props;
 
     return (
             <MaterialTable
                 options={{paging: false}}
                 icons={tableIcons}
                 title="Tour Items"
-                columns={cols}
+                columns={tourItemsCols(startTime)}
                 data={items}
                 editable={{
                     onRowAdd: newData =>

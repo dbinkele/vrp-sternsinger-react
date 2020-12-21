@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {makeStyles} from '@material-ui/core/styles';
 import {Typography} from '@material-ui/core';
 import TourItems from "./input/custom/Tour/TourItems";
@@ -27,7 +27,7 @@ const useStyles = makeStyles(theme => ({
 
 function MainContent() {
     const classes = useStyles();
-
+    const [startTime, setStartTime] = useState(null);
     return (
         <main className={classes.fullWidth}>
             <div className={classes.toolbar}/>
@@ -36,8 +36,8 @@ function MainContent() {
             </div>
             <div className={classes.content}>
                 <SnackbarProvider maxSnack={3}>
-                    <TourItems/>
-                    <TourOptions/>
+                    <TourItems startTime={startTime}/>
+                    <TourOptions setStartTime={setStartTime}/>
                 </SnackbarProvider>
 
                 {/*<RouteIdProvider>
