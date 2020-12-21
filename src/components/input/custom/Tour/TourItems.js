@@ -1,8 +1,8 @@
 import React from "react";
 import MaterialTable from "material-table";
-import {cols, tableIcons, tourItemsCols} from './ConstTable'
+import {tableIcons, tourItemsCols} from './ConstTable'
 import {timeorderedUuid} from "../../../../util/tools";
-import {connect} from 'react-redux'
+import {useDispatch, useSelector} from 'react-redux'
 import axios from 'axios';
 import {
     addTourItemActionCreator,
@@ -15,8 +15,10 @@ import {useSnackbar} from 'notistack';
 
 const TourItems = (props) => {
     const {enqueueSnackbar} = useSnackbar();
+    const dispatch = useDispatch();
+    const items = useSelector(state => state.tourItemsReducer.tourItems);
 
-    const {items, startTime} = props;
+    const {startTime} = props;
 
     return (
             <MaterialTable
@@ -32,9 +34,10 @@ const TourItems = (props) => {
                                 withCoordinates(newData,
                                     () => {
                                         newData.id = timeorderedUuid();
-                                        newData.label = newData.code + '/' + newData.street + '. ' + newData.number
-                                        newData.label += !!newData.name ? '/' + newData.name : ''
-                                        props.addTourItem(newData);
+                                        newData.label = newData.code + '/' + newData.street + '. ' + newData.number;
+                                        newData.label += !!newData.name ? '/' + newData.name : '';
+                                        dispatch(addTourItemActionCreator(newData));
+                                        //props.addTourItem(newData);
                                         resolve();
                                     },
                                     (arg) => {
@@ -48,7 +51,8 @@ const TourItems = (props) => {
                             setTimeout(() => {
                                 withCoordinates(newData, () => {
                                     const index = oldData.tableData.id;
-                                    props.updateTourItem(newData, index);
+                                    dispatch(updateTourItemActionCreator(newData, index));
+                                   // props.updateTourItem(newData, index);
                                     resolve();
                                 }, (arg) => {
                                     enqueueSnackbar(arg, {variant: 'error'});
@@ -60,7 +64,8 @@ const TourItems = (props) => {
                         new Promise((resolve, reject) => {
                             setTimeout(() => {
                                 const index = oldData.tableData.id;
-                                props.removeTourItem(index);
+                                dispatch(removeTourItemActionCreator(index));
+                               // props.removeTourItem(index);
                                 resolve();
                             }, 10)
                         }),
@@ -102,12 +107,4 @@ const withCoordinates = (row, resolve, reject) => {
 }
 
 
-export default connect(state => {
-        const {tourItems} = state.tourItemsReducer;
-        return {items: tourItems};
-    }
-    , {
-        addTourItem: addTourItemActionCreator,
-        removeTourItem: removeTourItemActionCreator,
-        updateTourItem: updateTourItemActionCreator
-    })(TourItems)
+export default TourItems;
