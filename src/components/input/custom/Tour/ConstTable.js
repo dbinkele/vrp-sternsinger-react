@@ -83,6 +83,22 @@ const round = (data, dec) => {
     return !!data ? parseFloat(data).toFixed(dec) : "";
 }
 
+const Timepicker2 = (props) => {
+    const {value, onChange, error, helperText} = props;
+    return <>
+        <MuiPickersUtilsProvider utils={DateFnsUtils}>
+            <TimePicker
+                clearable
+                ampm={false}
+                emptyLabel={''}
+                value={!value ? null : value}
+                onChange={onChange}
+            />
+        </MuiPickersUtilsProvider>
+        {error && <p style={{color: 'red'}}>{helperText} </p>}
+    </>
+}
+
 export const cols = [
     {
         title: 'Postal Code',
@@ -111,17 +127,7 @@ export const cols = [
         type: "datetime",
         validate: rowData => validateStartTimeWindow(rowData),
         render: (data) => renderTime(data),
-        editComponent: ({value, onChange}) => (
-            <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                <TimePicker
-                    clearable
-                    ampm={false}
-                    emptyLabel={''}
-                    value={!value ? null : value}
-                    onChange={onChange}
-                />
-            </MuiPickersUtilsProvider>
-        )
+        editComponent: Timepicker2
     },
     {
         title: "End Time Window",
@@ -129,17 +135,7 @@ export const cols = [
         type: "datetime",
         validate: rowData => validateEndTimeWindow(rowData),
         render: (data) => renderTime(data),
-        editComponent: ({value, onChange}) => (
-            <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                <TimePicker
-                    clearable
-                    ampm={false}
-                    emptyLabel={''}
-                    value={!value ? null : value}
-                    onChange={onChange}
-                />
-            </MuiPickersUtilsProvider>
-        )
+        editComponent: Timepicker2
     },
     {
         title: 'Latitude', field: 'lat', editable: 'never',
@@ -151,7 +147,6 @@ export const cols = [
     }
 ]
 
-
 const renderTime = data => {
     if (data.time === null || !data.time) {
         return "";
@@ -160,11 +155,19 @@ const renderTime = data => {
 }
 
 
+function timewindowstartAbsent(rowData) {
+    return !("timewindowstart" in rowData) || rowData.timewindowstart == null;
+}
+
+function timewindowEndAbsent(rowData) {
+    return !("timewindowend" in rowData) || rowData.timewindowend == null;
+}
+
 const validateStartTimeWindow = rowData => {
-    if (!("timewindowstart" in rowData) && "timewindowend" in rowData) {
+    if (timewindowstartAbsent(rowData) && !timewindowEndAbsent(rowData)) {
         return {isValid: false, helperText: 'End of time window given, but not start'}
     }
-    if ("timewindowstart" in rowData && "timewindowend" in rowData) {
+    if (!timewindowstartAbsent(rowData) && !timewindowEndAbsent(rowData)) {
         if (moment(rowData.timewindowstart).isAfter(moment(rowData.timewindowend))) {
             return {isValid: false, helperText: 'Start of time window before end'}
         }
@@ -172,11 +175,13 @@ const validateStartTimeWindow = rowData => {
     return {isValid: true}
 }
 
+
+
 const validateEndTimeWindow = rowData => {
-    if (!("timewindowend" in rowData) && "timewindowstart" in rowData) {
+    if (timewindowEndAbsent(rowData) && !timewindowstartAbsent(rowData)) {
         return {isValid: false, helperText: 'Start of time window given, but not end'}
     }
-    if ("timewindowstart" in rowData && "timewindowend" in rowData) {
+    if (!timewindowstartAbsent(rowData) && !timewindowEndAbsent(rowData)) {
         if (moment(rowData.timewindowstart).isAfter(moment(rowData.timewindowend))) {
             return {isValid: false, helperText: 'Start of time window before end'}
         }
