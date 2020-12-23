@@ -130,7 +130,7 @@ export const tourItemsCols = (startTime) => {
             field: "timewindowstart",
             type: "datetime",
             validate: rowData => validateStartTimeWindow(rowData, startTime),
-            render: (data) => renderTime(data),
+            render: (data) => renderTime(data.timewindowstart),
             editComponent: Timepicker2
         },
         {
@@ -138,7 +138,7 @@ export const tourItemsCols = (startTime) => {
             field: "timewindowend",
             type: "datetime",
             validate: rowData => validateEndTimeWindow(rowData, startTime),
-            render: (data) => renderTime(data),
+            render: (data) => renderTime(data.timewindowend),
             editComponent: Timepicker2
         },
         {
@@ -152,10 +152,10 @@ export const tourItemsCols = (startTime) => {
 }
 
 const renderTime = data => {
-    if (data.time === null || !data.time) {
+    if (data === null || !data) {
         return "";
     }
-    return moment(data.time).format("hh:mm A");
+    return moment(data).format("hh:mm A");
 }
 
 

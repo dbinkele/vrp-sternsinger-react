@@ -7,7 +7,7 @@ import {makeStyles} from "@material-ui/core/styles";
 import {useSelector} from "react-redux";
 import Settings from "./Settings";
 import CustomAccordion from "./CustomAccordion";
-
+const moment = require('moment')
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -52,7 +52,8 @@ const TourOptionsForm = (props) => {
         <Fragment>
 
             <div className={classes.root}>
-                <CustomAccordion panel={"panel1"} component={<Settings register={register} errors={errors} control={control}/>}
+                <CustomAccordion panel={"panel1"}
+                                 component={<Settings register={register} errors={errors} control={control}/>}
                                  heading={"General Settings"} details={"Basic Driver Values for the algorithm"}
                                  expanded={expanded} setExpanded={setExpanded}/>
                 <CustomAccordion panel={"panel2"} component={<TodoApp {...{
@@ -67,7 +68,8 @@ const TourOptionsForm = (props) => {
                         todoIdx: 1,
                         maxToDo: Number.MAX_VALUE
                     }
-                }}/>} heading={"Tour Constraints"} details={"Tour Items  on the same tour in arbitrary order"} expanded={expanded}
+                }}/>} heading={"Tour Constraints"} details={"Tour Items  on the same tour in arbitrary order"}
+                                 expanded={expanded}
                                  setExpanded={setExpanded}/>
 
                 <CustomAccordion panel={"panel4"} component={<TodoApp {...{
@@ -75,7 +77,8 @@ const TourOptionsForm = (props) => {
                         todoIdx: 2,
                         maxToDo: Number.MAX_VALUE
                     }
-                }}/>} heading={"Tour Constraints Ordered"} details={"Tour Items on the same tour in given order"} expanded={expanded}
+                }}/>} heading={"Tour Constraints Ordered"} details={"Tour Items on the same tour in given order"}
+                                 expanded={expanded}
                                  setExpanded={setExpanded}/>
 
                 <CustomAccordion panel={"panel5"} component={<TodoApp {...{
@@ -83,7 +86,8 @@ const TourOptionsForm = (props) => {
                         todoIdx: 3,
                         maxToDo: Number.MAX_VALUE
                     }
-                }}/>} heading={"Tour Constraints Different"} details={"Tour Items that must be on different routes"} expanded={expanded}
+                }}/>} heading={"Tour Constraints Different"} details={"Tour Items that must be on different routes"}
+                                 expanded={expanded}
                                  setExpanded={setExpanded}/>
 
             </div>
@@ -97,8 +101,6 @@ const TourOptionsForm = (props) => {
                     if (!generalSettingsValid) return;
 
                     let settingsValues = getValues();
-                    console.log("HAndler " + settingsValues.depot);
-                    console.log(theState.todoReducer[0]);
                     let tourItemsIds = theState.tourItemsReducer.tourItems.map(x => x.id);
                     const data = {
                         recipent: settingsValues.email,
@@ -111,16 +113,19 @@ const TourOptionsForm = (props) => {
                             timeout: Number(settingsValues.timeout),
                             depot: tourItemsIds.indexOf(settingsValues.depot),
                             num_vehicles: Number(settingsValues.vehicles),
+                            duration: Number(settingsValues.defaultDuration),
                             fixed_arcs: [],
                             assign_to_route: constraintsToTourItemsIndex(tourItemsIds, 0),
                             same_roue: constraintsToTourItemsIndex(tourItemsIds, 1),
                             same_route_ordered: constraintsToTourItemsIndex(tourItemsIds, 2),
-                            different_route: constraintsToTourItemsIndex(tourItemsIds, 3)
+                            different_route: constraintsToTourItemsIndex(tourItemsIds, 3),
+                            dwell_duration: dwellDuration(theState, tourItemsIds, settingsValues.defaultDuration),
+                            time_windows: timeWindow(theState, tourItemsIds, settingsValues.starttime)
                         }
                     };
 
+
                     console.log(data);
-                    var i = 9;
                 }}
             >
                 Next
@@ -130,5 +135,22 @@ const TourOptionsForm = (props) => {
     );
 };
 
+const dwellDuration = (theState, tourItemsIds, defaultDuration) => {
+    return theState.tourItemsReducer.tourItems.filter(x => x.hasOwnProperty('duration')).map(item => ({
+        id: tourItemsIds.indexOf(item.id),
+        duration: item.duration
+    })).concat([{id: -1, duration: Number(defaultDuration)}]);
+}
 
+function timeDiffMinutes(later, earlier) {
+    return Math.round(moment.duration(moment(later).diff(earlier)).asMinutes());
+}
+
+const timeWindow = (theState, tourItemsIds, starttime) => {
+    return theState.tourItemsReducer.tourItems.filter(x => x.hasOwnProperty('timewindowstart') && x.hasOwnProperty('timewindowend')).map(item => ({
+        id: tourItemsIds.indexOf(item.id),
+        start: timeDiffMinutes(item.timewindowstart, starttime),
+        end: timeDiffMinutes(item.timewindowend, starttime)
+    }));
+}
 export default TourOptionsForm;
