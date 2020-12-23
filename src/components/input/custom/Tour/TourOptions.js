@@ -7,6 +7,7 @@ import {makeStyles} from "@material-ui/core/styles";
 import {useSelector} from "react-redux";
 import Settings from "./Settings";
 import CustomAccordion from "./CustomAccordion";
+
 const moment = require('moment')
 
 const useStyles = makeStyles((theme) => ({
@@ -42,11 +43,6 @@ const TourOptionsForm = (props) => {
     useEffect(() => {
         setStartTime(old => watchStartTime);
     }, [watchStartTime]);
-
-    function constraintsToTourItemsIndex(tourItemsIds, index) {
-        let constr0 = theState.todoReducer.todos[index].map(x => x.constraints);
-        return constr0.map(x => x.map(y => y.id).map(z => tourItemsIds.indexOf(z)));
-    }
 
     return (
         <Fragment>
@@ -96,44 +92,75 @@ const TourOptionsForm = (props) => {
             <Button
                 color="secondary"
                 variant="outlined"
-                onClick={async () => {
-                    const generalSettingsValid = await trigger();
-                    if (!generalSettingsValid) return;
-
-                    let settingsValues = getValues();
-                    let tourItemsIds = theState.tourItemsReducer.tourItems.map(x => x.id);
-                    const data = {
-                        recipent: settingsValues.email,
-                        data: theState.tourItemsReducer.tourItems,
-                        constraints: {
-                            num_visits_to_max_tour_len_ration: [
-                                Number(settingsValues.weight_visits),
-                                Number(settingsValues.weight_length)
-                            ],
-                            timeout: Number(settingsValues.timeout),
-                            depot: tourItemsIds.indexOf(settingsValues.depot),
-                            num_vehicles: Number(settingsValues.vehicles),
-                            duration: Number(settingsValues.defaultDuration),
-                            fixed_arcs: [],
-                            assign_to_route: constraintsToTourItemsIndex(tourItemsIds, 0),
-                            same_roue: constraintsToTourItemsIndex(tourItemsIds, 1),
-                            same_route_ordered: constraintsToTourItemsIndex(tourItemsIds, 2),
-                            different_route: constraintsToTourItemsIndex(tourItemsIds, 3),
-                            dwell_duration: dwellDuration(theState, tourItemsIds, settingsValues.defaultDuration),
-                            time_windows: timeWindow(theState, tourItemsIds, settingsValues.starttime)
-                        }
-                    };
-
-
-                    console.log(data);
-                }}
+                onClick={uiToJson(trigger, getValues, theState)}
             >
                 Next
+            </Button>
+            <Button
+                color="secondary"
+                variant="outlined"
+                onClick={onDownload(uiToJson(trigger, getValues, theState))}
+            >
+                Download
             </Button>
 
         </Fragment>
     );
 };
+
+
+function constraintsToTourItemsIndex(theState, tourItemsIds, index) {
+    return theState.todoReducer.todos[index]
+        .map(x => x.constraints)
+        .map(x => x.map(y => y.id)
+            .map(z => tourItemsIds.indexOf(z)));
+}
+
+
+function uiToJson(trigger, getValues, theState) {
+    return async () => {
+        const generalSettingsValid = await trigger();
+        if (!generalSettingsValid) return;
+
+        let settingsValues = getValues();
+        let tourItemsIds = theState.tourItemsReducer.tourItems.map(x => x.id);
+        let res = {
+            recipent: settingsValues.email,
+            data: theState.tourItemsReducer.tourItems,
+            constraints: {
+                num_visits_to_max_tour_len_ration: [
+                    Number(settingsValues.weight_visits),
+                    Number(settingsValues.weight_length)
+                ],
+                timeout: Number(settingsValues.timeout),
+                depot: tourItemsIds.indexOf(settingsValues.depot),
+                num_vehicles: Number(settingsValues.vehicles),
+                duration: Number(settingsValues.defaultDuration),
+                fixed_arcs: [],
+                assign_to_route: constraintsToTourItemsIndex(theState, tourItemsIds, 0),
+                same_roue: constraintsToTourItemsIndex(theState, tourItemsIds, 1),
+                same_route_ordered: constraintsToTourItemsIndex(theState, tourItemsIds, 2),
+                different_route: constraintsToTourItemsIndex(theState, tourItemsIds, 3),
+                dwell_duration: dwellDuration(theState, tourItemsIds, settingsValues.defaultDuration),
+                time_windows: timeWindow(theState, tourItemsIds, settingsValues.starttime)
+            }
+        };
+        console.log(res);
+        return res;
+    };
+}
+
+function download(content, fileName, contentType) {
+    const a = document.createElement("a");
+    const file = new Blob([content], {type: contentType});
+    a.href = URL.createObjectURL(file);
+    a.download = fileName;
+    a.click();
+}
+
+function onDownload(json) {
+    download(JSON.stringify(json), "json-file-name.json", "text/plain");
+}
 
 const dwellDuration = (theState, tourItemsIds, defaultDuration) => {
     return theState.tourItemsReducer.tourItems.filter(x => x.hasOwnProperty('duration')).map(item => ({

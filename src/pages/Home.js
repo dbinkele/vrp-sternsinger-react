@@ -17,7 +17,7 @@ function Home() {
     return (
         <div className={classes.root}>
             <TopMenu />
-            <SideMenu />
+            {/*<SideMenu />*/}
             <MainContent />
             <Footer />
         </div>

@@ -32,7 +32,7 @@ function MainContent() {
         <main className={classes.fullWidth}>
             <div className={classes.toolbar}/>
             <div className={classes.title}>
-                <Typography variant='h6'>Title</Typography>
+                <Typography variant='h6'>Tour Planning</Typography>
             </div>
             <div className={classes.content}>
                 <SnackbarProvider maxSnack={3}>
