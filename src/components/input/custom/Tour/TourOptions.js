@@ -7,6 +7,8 @@ import {makeStyles} from "@material-ui/core/styles";
 import {useSelector} from "react-redux";
 import Settings from "./Settings";
 import CustomAccordion from "./CustomAccordion";
+import {url} from '../../../../util/tools'
+import {useSnackbar} from "notistack";
 
 const moment = require('moment')
 
@@ -20,6 +22,7 @@ const useStyles = makeStyles((theme) => ({
 const TourOptionsForm = (props) => {
     const {setStartTime} = props;
     const theState = useSelector(state => state);
+    const {enqueueSnackbar} = useSnackbar();
 
     const {register, errors, watch, getValues, trigger, control} = useForm({
         mode: 'onChange',
@@ -43,6 +46,19 @@ const TourOptionsForm = (props) => {
     useEffect(() => {
         setStartTime(old => watchStartTime);
     }, [watchStartTime]);
+
+    const onClick = () => {
+        if (theState.tourItemsReducer.tourItems.length <= 1) {
+            enqueueSnackbar("There must be more than one tour item!", {variant: 'error'});
+            return;
+        }
+        uiToJson(trigger, getValues, theState)
+            .then(json => {
+                if (json != null) {
+                    postRequest(json)
+                }
+            });
+    }
 
     return (
         <Fragment>
@@ -92,21 +108,38 @@ const TourOptionsForm = (props) => {
             <Button
                 color="secondary"
                 variant="outlined"
-                onClick={uiToJson(trigger, getValues, theState)}
+                onClick={onClick}
             >
                 Next
             </Button>
-            <Button
-                color="secondary"
-                variant="outlined"
-                onClick={onDownload(uiToJson(trigger, getValues, theState))}
-            >
-                Download
-            </Button>
+
 
         </Fragment>
     );
 };
+
+const postRequest = (json) => {
+    const requestOptions = {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(json)
+    };
+    fetch(url() + 'vrp', requestOptions)
+        .then(async response => {
+            //  console.log(await response.text());
+            const data = await response.json();
+
+            // check for error response
+            if (!response.ok) {
+                // get error message from body or default to response status
+                const error = (data && data.message) || response.status;
+                return Promise.reject(error);
+            }
+        })
+        .catch(error => {
+            console.error('There was an error!', error);
+        });
+}
 
 
 function constraintsToTourItemsIndex(theState, tourItemsIds, index) {
@@ -117,37 +150,35 @@ function constraintsToTourItemsIndex(theState, tourItemsIds, index) {
 }
 
 
-function uiToJson(trigger, getValues, theState) {
-    return async () => {
-        const generalSettingsValid = await trigger();
-        if (!generalSettingsValid) return;
+const uiToJson = async (trigger, getValues, theState) => {
+    const generalSettingsValid = await trigger();
+    if (!generalSettingsValid) return null;
 
-        let settingsValues = getValues();
-        let tourItemsIds = theState.tourItemsReducer.tourItems.map(x => x.id);
-        let res = {
-            recipent: settingsValues.email,
-            data: theState.tourItemsReducer.tourItems,
-            constraints: {
-                num_visits_to_max_tour_len_ration: [
-                    Number(settingsValues.weight_visits),
-                    Number(settingsValues.weight_length)
-                ],
-                timeout: Number(settingsValues.timeout),
-                depot: tourItemsIds.indexOf(settingsValues.depot),
-                num_vehicles: Number(settingsValues.vehicles),
-                duration: Number(settingsValues.defaultDuration),
-                fixed_arcs: [],
-                assign_to_route: constraintsToTourItemsIndex(theState, tourItemsIds, 0),
-                same_roue: constraintsToTourItemsIndex(theState, tourItemsIds, 1),
-                same_route_ordered: constraintsToTourItemsIndex(theState, tourItemsIds, 2),
-                different_route: constraintsToTourItemsIndex(theState, tourItemsIds, 3),
-                dwell_duration: dwellDuration(theState, tourItemsIds, settingsValues.defaultDuration),
-                time_windows: timeWindow(theState, tourItemsIds, settingsValues.starttime)
-            }
-        };
-        console.log(res);
-        return res;
+    let settingsValues = getValues();
+    let tourItemsIds = theState.tourItemsReducer.tourItems.map(x => x.id);
+    let res = {
+        recipent: settingsValues.email,
+        data: theState.tourItemsReducer.tourItems,
+        constraints: {
+            num_visits_to_max_tour_len_ration: [
+                Number(settingsValues.weight_visits),
+                Number(settingsValues.weight_length)
+            ],
+            timeout: Number(settingsValues.timeout) * 60,
+            depot: tourItemsIds.indexOf(settingsValues.depot),
+            num_vehicles: Number(settingsValues.vehicles),
+            duration: Number(settingsValues.defaultDuration),
+            fixed_arcs: [],
+            assign_to_route: constraintsToTourItemsIndex(theState, tourItemsIds, 0),
+            same_route: constraintsToTourItemsIndex(theState, tourItemsIds, 1),
+            same_route_ordered: constraintsToTourItemsIndex(theState, tourItemsIds, 2),
+            different_route: constraintsToTourItemsIndex(theState, tourItemsIds, 3),
+            dwell_duration: dwellDuration(theState, tourItemsIds, settingsValues.defaultDuration),
+            time_windows: timeWindow(theState, tourItemsIds, settingsValues.starttime)
+        }
     };
+    console.log(res);
+    return res;
 }
 
 function download(content, fileName, contentType) {
@@ -165,8 +196,8 @@ function onDownload(json) {
 const dwellDuration = (theState, tourItemsIds, defaultDuration) => {
     return theState.tourItemsReducer.tourItems.filter(x => x.hasOwnProperty('duration')).map(item => ({
         id: tourItemsIds.indexOf(item.id),
-        duration: item.duration
-    })).concat([{id: -1, duration: Number(defaultDuration)}]);
+        duration: item.duration * 60
+    })).concat([{id: -1, duration: Number(defaultDuration) * 60}]);
 }
 
 function timeDiffMinutes(later, earlier) {
@@ -174,10 +205,17 @@ function timeDiffMinutes(later, earlier) {
 }
 
 const timeWindow = (theState, tourItemsIds, starttime) => {
-    return theState.tourItemsReducer.tourItems.filter(x => x.hasOwnProperty('timewindowstart') && x.hasOwnProperty('timewindowend')).map(item => ({
-        id: tourItemsIds.indexOf(item.id),
-        start: timeDiffMinutes(item.timewindowstart, starttime),
-        end: timeDiffMinutes(item.timewindowend, starttime)
-    }));
+    let result = theState.tourItemsReducer.tourItems
+        .filter(x => x.hasOwnProperty('timewindowstart') && x.hasOwnProperty('timewindowend'))
+        .filter(x => x.timewindowstart !== null && x.timewindowend != null)
+        .map(item => ({
+            id: tourItemsIds.indexOf(item.id),
+            interval: [timeDiffMinutes(item.timewindowstart, starttime), timeDiffMinutes(item.timewindowend, starttime)]
+        }));
+    return result.concat([{
+        id: 0,
+        interval: [0, 0]
+    }]);
+
 }
 export default TourOptionsForm;

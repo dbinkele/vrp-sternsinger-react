@@ -106,7 +106,7 @@ export const cols = [
         validate: rowData => validatePostalCode(rowData.code),
     },
     {
-        title: 'City', field: 'city', cwidth: 'auto'
+        title: 'City', field: 'city', cwidth: 'auto', initialEditValue: ' '
     },
     {
         title: 'Street', field: 'street', cellStyle: {wordBreak: 'break-all'},
@@ -116,11 +116,11 @@ export const cols = [
         title: 'Number', field: 'number', type: 'numeric',
         validate: rowData => validateNumber(rowData.number),
     },
-    {title: 'Name', field: 'name'},
+    {title: 'Name', field: 'name', initialEditValue: ' '},
     {
         title: 'Duration Minutes', field: 'duration', type: 'numeric',
     },
-    {title: 'Hint', field: 'hint'}
+    {title: 'Hint', field: 'hint', initialEditValue: ' '}
 ]
 
 export const tourItemsCols = (startTime) => {
@@ -168,9 +168,12 @@ function timewindowEndAbsent(rowData) {
 }
 
 const validateStartTimeWindow = (rowData, startTime) => {
-    if(!timewindowstartAbsent(rowData) && startTime != null){
-        if(moment(rowData.timewindowstart).isBefore(moment(startTime))){
-            return {isValid: false, helperText: 'End of time window not after global start time ' + moment(startTime).format("hh:mm A")}
+    if (!timewindowstartAbsent(rowData) && startTime != null) {
+        if (moment(rowData.timewindowstart).isBefore(moment(startTime))) {
+            return {
+                isValid: false,
+                helperText: 'End of time window not after global start time ' + moment(startTime).format("hh:mm A")
+            }
         }
     }
     if (timewindowstartAbsent(rowData) && !timewindowEndAbsent(rowData)) {
@@ -185,11 +188,13 @@ const validateStartTimeWindow = (rowData, startTime) => {
 }
 
 
-
 const validateEndTimeWindow = (rowData, startTime) => {
-    if(!timewindowEndAbsent(rowData) && startTime != null){
-        if(moment(rowData.timewindowend).isBefore(moment(startTime))){
-            return {isValid: false, helperText: 'End of time window not after global start time ' + moment(startTime).format("hh:mm A")}
+    if (!timewindowEndAbsent(rowData) && startTime != null) {
+        if (moment(rowData.timewindowend).isBefore(moment(startTime))) {
+            return {
+                isValid: false,
+                helperText: 'End of time window not after global start time ' + moment(startTime).format("hh:mm A")
+            }
         }
     }
     if (timewindowEndAbsent(rowData) && !timewindowstartAbsent(rowData)) {

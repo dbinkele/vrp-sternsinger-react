@@ -81,13 +81,13 @@ const Settings = ({register, errors, control}) => {
             name="timeout"
             margin="normal"
             variant="outlined"
-            defaultValue={3}
+            defaultValue={1}
             error={!!errors.timeout}
             inputRef={
                 register(
                     {
                         required: "Please specify Timeout",
-                        min: {value: 3, message: "Timeout must be at least 3."},
+                        min: {value: 1, message: "Timeout must be at least 1."},
                         max: {value: 10, message: "Timeout can be at most 10."}
                     })}
         />
