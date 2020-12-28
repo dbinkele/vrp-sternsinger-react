@@ -11,6 +11,7 @@ import {
 } from '../../../../modules/tourItemsActions.js'
 
 import {useSnackbar} from 'notistack';
+import Upload from "../../../../util/UploadTourItems";
 
 
 const TourItems = (props) => {
@@ -21,6 +22,7 @@ const TourItems = (props) => {
     const {startTime} = props;
 
     return (
+        <>
             <MaterialTable
                 options={{paging: false}}
                 icons={tableIcons}
@@ -71,6 +73,8 @@ const TourItems = (props) => {
                         }),
                 }}
             />
+            <Upload/>
+            </>
     )
 
 }
