@@ -56,6 +56,12 @@ const TourOptionsForm = (props) => {
             .then(json => {
                 if (json !== null) {
                     postRequest(json)
+                        .then(response => {
+                            enqueueSnackbar("Successful submitted! Job ID " + response.id + " Job Status: " + response.status , {variant: 'info'});
+                        })
+                        .catch(error => {
+                            enqueueSnackbar(error.message, {variant: 'error'});
+                        })
                 }
             });
     }
@@ -66,12 +72,6 @@ const TourOptionsForm = (props) => {
         } else {
             enqueueSnackbar("There must be at least one tour item!", {variant: 'warning'});
         }
-        // uiToJson(trigger, getValues, theState)
-        //     .then(json => {
-        //         if (json !== null) {
-        //             download(theState.tourItemsReducer.tourItems);
-        //         }
-        //     });
     }
 
     return (
@@ -124,7 +124,7 @@ const TourOptionsForm = (props) => {
                 variant="outlined"
                 onClick={onClick}
             >
-                Next
+                Submit
             </Button>
             <Button
                 color="secondary"
@@ -145,7 +145,7 @@ const postRequest = (json) => {
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify(json)
     };
-    fetch(url() + 'vrp', requestOptions)
+    return fetch(url() + 'vrp', requestOptions)
         .then(async response => {
             //  console.log(await response.text());
             const data = await response.json();
@@ -156,9 +156,7 @@ const postRequest = (json) => {
                 const error = (data && data.message) || response.status;
                 return Promise.reject(error);
             }
-        })
-        .catch(error => {
-            console.error('There was an error!', error);
+            return data;
         });
 }
 
