@@ -54,10 +54,24 @@ const TourOptionsForm = (props) => {
         }
         uiToJson(trigger, getValues, theState)
             .then(json => {
-                if (json != null) {
+                if (json !== null) {
                     postRequest(json)
                 }
             });
+    }
+
+    const onDownload = () => {
+        if (theState.tourItemsReducer.tourItems.length > 0) {
+            download(theState.tourItemsReducer.tourItems);
+        } else {
+            enqueueSnackbar("There must be at least one tour item!", {variant: 'warning'});
+        }
+        // uiToJson(trigger, getValues, theState)
+        //     .then(json => {
+        //         if (json !== null) {
+        //             download(theState.tourItemsReducer.tourItems);
+        //         }
+        //     });
     }
 
     return (
@@ -111,6 +125,13 @@ const TourOptionsForm = (props) => {
                 onClick={onClick}
             >
                 Next
+            </Button>
+            <Button
+                color="secondary"
+                variant="outlined"
+                onClick={onDownload}
+            >
+                Download
             </Button>
 
 
@@ -181,16 +202,12 @@ const uiToJson = async (trigger, getValues, theState) => {
     return res;
 }
 
-function download(content, fileName, contentType) {
+function download(json) {
     const a = document.createElement("a");
-    const file = new Blob([content], {type: contentType});
+    const file = new Blob([JSON.stringify(json)], {type: "text/plain"});
     a.href = URL.createObjectURL(file);
-    a.download = fileName;
+    a.download = "touritems.json";
     a.click();
-}
-
-function onDownload(json) {
-    download(JSON.stringify(json), "json-file-name.json", "text/plain");
 }
 
 const dwellDuration = (theState, tourItemsIds, defaultDuration) => {
