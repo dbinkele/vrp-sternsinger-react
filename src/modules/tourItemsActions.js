@@ -3,7 +3,7 @@ import {handleActions} from 'redux-actions'
 const ADD_TOUR_ITEM = 'ADD_TOUR_ITEM'
 const REMOVE_TOUR_ITEM = 'REMOVE_TOUR_ITEM'
 const UPDATE_TOUR_ITEM = 'UPDATE_TOUR_ITEM'
-
+const REFRESH = 'REFRESH'
 
 export const addTourItemActionCreator = item => {
     return {
@@ -30,8 +30,19 @@ export const updateTourItemActionCreator = (item, index) => {
     }
 }
 
+export const refreshTourItemAction = (items) => {
+    return {
+        type: REFRESH,
+        payload: items
+    }
+}
 
 export const tourItemsReducer = handleActions({
+        [REFRESH]: (state, action) => {
+            return {
+                tourItems: action.payload
+            };
+        },
         [ADD_TOUR_ITEM]: (state, action) => {
             if (state.tourItems == null){
                 return {

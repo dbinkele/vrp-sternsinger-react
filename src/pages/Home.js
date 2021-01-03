@@ -16,10 +16,10 @@ function Home() {
 
     return (
         <div className={classes.root}>
-            <TopMenu />
+            {/*<TopMenu />*/}
             {/*<SideMenu />*/}
             <MainContent />
-            <Footer />
+            {/*<Footer />*/}
         </div>
     );
 }

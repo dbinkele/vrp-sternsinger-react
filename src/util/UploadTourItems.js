@@ -1,8 +1,14 @@
 import React, {createRef, Fragment, useCallback} from 'react';
 import {useDropzone} from "react-dropzone";
 import Button from "@material-ui/core/Button";
+import {useDispatch, useSelector} from "react-redux";
+import {refreshTourItemAction} from "../modules/tourItemsActions";
 
 const Upload = () => {
+
+    const dispatch = useDispatch();
+    //const items = useSelector(state => state.tourItemsReducer.tourItems);
+
     const dropzoneRef = createRef();
     const openDialog = () => {
         // Note that the ref is set async,
@@ -19,6 +25,7 @@ const Upload = () => {
             let content = reader.result;
             console.log("-------> result");
             console.log(content);
+            dispatch(refreshTourItemAction(JSON.parse(content)));
         };
         reader.readAsText(acceptedFiles[0])
     }, []);
