@@ -185,6 +185,7 @@ const uiToJson = async (trigger, getValues, theState) => {
             ],
             timeout: Number(settingsValues.timeout) * 60,
             depot: tourItemsIds.indexOf(settingsValues.depot),
+            planningType: settingsValues.planningType,
             num_vehicles: Number(settingsValues.vehicles),
             duration: Number(settingsValues.defaultDuration),
             fixed_arcs: [],

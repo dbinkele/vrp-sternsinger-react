@@ -29,8 +29,9 @@ const Settings = ({register, errors, control}) => {
         error(errors?.weight_length?.message);
         error(errors?.depot?.message);
         error(errors?.starttime?.message);
+        error(errors.planningType?.message);
     }, [errors.email, errors.timeout, errors.vehicles, errors.defaultDuration, errors.weight_visits,
-        errors.weight_length, errors.depot, errors.starttime, errors]);
+        errors.weight_length, errors.depot, errors.starttime, errors.planningType, errors]);
 
     return <>
         <FormControl
@@ -51,6 +52,48 @@ const Settings = ({register, errors, control}) => {
                 name="depot"
                 rules={{required: "Start Location is required"}}
                 control={control}
+            />
+        </FormControl>
+
+        <Controller
+            name="starttime"
+            control={control}
+            render={({ onChange, value }) => (
+                <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                    <TimePicker
+                        clearable
+                        ampm={false}
+                        label="Select Start Time"
+                        value={!value? null : value}
+                        onChange={onChange}
+                        error={Boolean(errors.starttime)}
+                    />
+                </MuiPickersUtilsProvider>
+            )}
+            rules={{required: "Start Time is required"}}
+        />
+
+        <FormControl
+            style={{minWidth: 120}}
+            error={Boolean(errors.planningType)}
+        >
+            <InputLabel id="demo-simple-select-label">
+                Select a Planning Type
+            </InputLabel>
+
+            <Controller
+                as={
+                    <Select>
+                        <MenuItem key={"foot"} value={"foot"}>foot
+                        </MenuItem>
+                        <MenuItem key={"car"} value={"car"}>car
+                        </MenuItem>
+                    </Select>
+                }
+                name="planningType"
+                rules={{required: "Planning Type is required"}}
+                control={control}
+                defaultValue={"car"}
             />
         </FormControl>
 
@@ -163,23 +206,7 @@ const Settings = ({register, errors, control}) => {
                     })}
         />
 
-        <Controller
-            name="starttime"
-            control={control}
-            render={({ onChange, value }) => (
-                <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                    <TimePicker
-                        clearable
-                        ampm={false}
-                        label="Select Start Time"
-                        value={!value? null : value}
-                        onChange={onChange}
-                        error={Boolean(errors.starttime)}
-                    />
-                </MuiPickersUtilsProvider>
-            )}
-            rules={{required: "Start Time is required"}}
-        />
+
         </>;
 }
 
