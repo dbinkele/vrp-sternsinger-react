@@ -1,13 +1,14 @@
 import {v1 as uuidv1} from 'uuid';
 
 export const url = () => {
-
-    if (process.env.NODE_ENV === 'development' || true) {//ToDo
-        return 'http://localhost:5000/'
+    console.log("NODE_ENV " + process.env.NODE_ENV)
+    if (process.env.NODE_ENV === 'production') {
+        const app_name = process.env.REACT_APP_HEROKU_APP_NAME;
+        let url = "http://" + app_name + ".herokuapp.com";
+        console.log("Url " + url);
+        return url
     }
-    if (process.env.NODE_ENV === 'production') {//ToDo delete as react is served by python now
-        return 'https://mighty-cliffs-46044.herokuapp.com/'
-    }
+    return 'http://localhost:80/'
 }
 
 export function not(a, b) {
@@ -62,7 +63,7 @@ export const round = (num, dec) => {
 
     var num_sign = num >= 0 ? 1 : -1;
 
-    return (Math.round((num*Math.pow(10,dec))+(num_sign*0.0001))/Math.pow(10,dec)).toFixed(dec);
+    return (Math.round((num * Math.pow(10, dec)) + (num_sign * 0.0001)) / Math.pow(10, dec)).toFixed(dec);
 }
 // Hook
 
