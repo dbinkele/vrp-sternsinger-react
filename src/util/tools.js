@@ -3,8 +3,7 @@ import {v1 as uuidv1} from 'uuid';
 export const url = () => {
     console.log("NODE_ENV " + process.env.NODE_ENV)
     if (process.env.NODE_ENV === 'production') {
-        const app_name = process.env.REACT_APP_HEROKU_APP_NAME;
-        let url = "http://" + app_name + ".herokuapp.com";
+        let url = window.location.origin.toString() + "/";
         console.log("Url " + url);
         return url
     }
