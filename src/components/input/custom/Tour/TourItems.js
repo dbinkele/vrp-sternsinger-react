@@ -1,7 +1,7 @@
 import React from "react";
 import MaterialTable from "material-table";
 import {tableIcons, tourItemsCols} from './ConstTable'
-import {timeorderedUuid} from "../../../../util/tools";
+import {timeorderedUuid, url} from "../../../../util/tools";
 import {useDispatch, useSelector} from 'react-redux'
 import axios from 'axios';
 import {
@@ -39,7 +39,6 @@ const TourItems = (props) => {
                                         newData.label = newData.code + '/' + newData.street + '. ' + newData.number;
                                         newData.label += !!newData.name ? '/' + newData.name : '';
                                         dispatch(addTourItemActionCreator(newData));
-                                        //props.addTourItem(newData);
                                         resolve();
                                     },
                                     (arg) => {
@@ -54,7 +53,6 @@ const TourItems = (props) => {
                                 withCoordinates(newData, () => {
                                     const index = oldData.tableData.id;
                                     dispatch(updateTourItemActionCreator(newData, index));
-                                   // props.updateTourItem(newData, index);
                                     resolve();
                                 }, (arg) => {
                                     enqueueSnackbar(arg, {variant: 'error'});
@@ -67,7 +65,6 @@ const TourItems = (props) => {
                             setTimeout(() => {
                                 const index = oldData.tableData.id;
                                 dispatch(removeTourItemActionCreator(index));
-                               // props.removeTourItem(index);
                                 resolve();
                             }, 10)
                         }),
@@ -81,18 +78,16 @@ const TourItems = (props) => {
 
 
 const withCoordinates = (row, resolve, reject) => {
-    let url = `https://nominatim.openstreetmap.org/search?format=json&country=de&postalcode=${row.code}&street=${row.number}+${row.street}`;
-    axios.get(url, {timeout: 5000})
+    const daUrl = url() + `coordinates?address=${row.street} ${row.number}&country=DE&code=${row.code}&locality=${row.city}`
+    axios.get(daUrl, {timeout: 5000})
         .then(res => res.data)
         .then(data => {
-            if (data.length > 0) {
-                let firstHit = data[0];
-                if (firstHit.lat != null && firstHit.lon != null) {
-                    row.lat = firstHit.lat;
-                    row.lon = firstHit.lon;
-                    resolve();
-                    return;
-                }
+            if (JSON.stringify(data) !=='{}') {
+                let firstHit = data;
+                row.lat = firstHit.lat;
+                row.lon = firstHit.lon;
+                resolve();
+                return;
             }
             reject("Wrong Address!")
         })

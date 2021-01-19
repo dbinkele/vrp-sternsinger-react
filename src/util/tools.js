@@ -47,13 +47,6 @@ export const uuidCompare = (a, b) => {
     return a < b ? -1 : (a > b ? 1 : 0);
 }
 
-const _ = require('lodash/core');
-export const diff = (prevData, data) => {
-    let prevDataId = prevData.map(x => x.id);
-    let [added, present] = partition(data, x => !prevDataId.includes(x.id));
-    let [updated, untouched] = partition(present, x => !prevData.find(y => _.isEqual(x, y)))
-    return [added, updated, untouched];
-}
 
 export const round = (num, dec) => {
 
@@ -64,10 +57,3 @@ export const round = (num, dec) => {
 
     return (Math.round((num * Math.pow(10, dec)) + (num_sign * 0.0001)) / Math.pow(10, dec)).toFixed(dec);
 }
-// Hook
-
-
-
-
-
-

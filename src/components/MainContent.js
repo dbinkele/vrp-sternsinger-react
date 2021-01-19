@@ -7,6 +7,7 @@ import {RouteIdProvider} from "./RouteIdContext";
 import RoutesIdForm from "./RoutesIdForm";
 import TourResult from "./input/custom/Tour/TourResult";
 import {SnackbarProvider} from "notistack";
+import MapView from "./map/MapView";
 
 
 const useStyles = makeStyles(theme => ({
@@ -39,7 +40,7 @@ function MainContent() {
                     <TourItems startTime={startTime}/>
                     <TourOptions setStartTime={setStartTime}/>
                 </SnackbarProvider>
-
+                <MapView/>
                 {/*<RouteIdProvider>
                     <RoutesIdForm/>
                     <TourResult/>
