@@ -8,6 +8,8 @@ import RoutesIdForm from "./RoutesIdForm";
 import TourResult from "./input/custom/Tour/TourResult";
 import {SnackbarProvider} from "notistack";
 import MapView from "./map/MapView";
+import CustomAccordion from "./input/custom/Tour/CustomAccordion";
+import Settings from "./input/custom/Tour/Settings";
 
 
 const useStyles = makeStyles(theme => ({
@@ -29,6 +31,8 @@ const useStyles = makeStyles(theme => ({
 function MainContent() {
     const classes = useStyles();
     const [startTime, setStartTime] = useState(null);
+    const [expanded, setExpanded] = React.useState(false);
+
     return (
         <main className={classes.fullWidth}>
             <div className={classes.toolbar}/>
@@ -38,9 +42,14 @@ function MainContent() {
             <div className={classes.content}>
                 <SnackbarProvider maxSnack={3}>
                     <TourItems startTime={startTime}/>
+                    <CustomAccordion panel={"panel1"}
+                                     component={ <MapView/>}
+                                     heading={"Show Tour Items"} details={"A Map showing all Venues."}
+                                     expanded={expanded} setExpanded={setExpanded}/>
+
                     <TourOptions setStartTime={setStartTime}/>
                 </SnackbarProvider>
-                <MapView/>
+
                 {/*<RouteIdProvider>
                     <RoutesIdForm/>
                     <TourResult/>
